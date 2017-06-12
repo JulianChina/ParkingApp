@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,7 +15,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.amap.api.maps.model.Text;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.district.DistrictItem;
@@ -25,6 +28,7 @@ import com.amap.api.services.district.DistrictSearchQuery;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
+import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.basic.UiSettingsActivity;
 import com.run.sg.amap3d.util.ToastUtil;
 
@@ -69,23 +73,44 @@ public class DistrictActivity extends Activity implements
 	private Spinner spinnerCity;
 	private AutoCompleteTextView mKeywordText;
 	private Button mButtonConfirm;
+	private TextView mCurrentCityText;
 	private ListView mInputList;
 	List<String> mListAddress = new ArrayList<String>();
-	private String mCityName = "深圳";
-	private String mCityCode = "0755";
+	private String mCurrentProvinceName = "广东省";
+	private String mCurrentCityName = "深圳";
+	private String mCurrentCityCode = "0755";
+	private String mQueryCityName = "深圳";
 	private List<LatLonPoint> mListLatLonPoint = new ArrayList<LatLonPoint>();
 	private LatLonPoint mSearchPoint = null;
+	private int mProvinceIndex = 0;
+	private int mCityIndex = 0;
+	private boolean mProvinceFlag = true;
+	private boolean mCityFlag = true;
+	private boolean mQuerySubDistrictFlag= false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(com.run.sg.amap3d.R.layout.district_activity);
 
+		Intent intent = getIntent();
+		if (null != intent) {
+			mCurrentProvinceName = intent.getStringExtra("province_name");
+			mCurrentCityName = intent.getStringExtra("city_name");
+			mCurrentCityCode = intent.getStringExtra("city_code");
+			mQueryCityName = mCurrentCityName;
+		}
+		mProvinceFlag = true;
+		mCityFlag = true;
+
 		spinnerProvince = (Spinner) findViewById(com.run.sg.amap3d.R.id.spinner_province);
+
 		spinnerCity = (Spinner) findViewById(com.run.sg.amap3d.R.id.spinner_city);
 		mKeywordText = (AutoCompleteTextView)findViewById(com.run.sg.amap3d.R.id.text_street);
 		mInputList = (ListView)findViewById(com.run.sg.amap3d.R.id.input_list);
 		mButtonConfirm = (Button) findViewById(com.run.sg.amap3d.R.id.btn_confirm);
+		mCurrentCityText = (TextView)findViewById(R.id.current_city_text);
+		mCurrentCityText.setText(mCurrentCityName);
 
 		spinnerProvince.setOnItemSelectedListener(this);
 		spinnerCity.setOnItemSelectedListener(this);
@@ -104,7 +129,7 @@ public class DistrictActivity extends Activity implements
 			public void onClick(View v) {
 				Intent intent = new Intent(DistrictActivity.this, UiSettingsActivity.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("cityCode", mCityCode);
+				bundle.putString("cityCode", mCurrentCityCode);
 				bundle.putDouble("Lat", mSearchPoint.getLatitude());
 				bundle.putDouble("Lon", mSearchPoint.getLongitude());
 				intent.putExtra("destination", bundle);
@@ -141,7 +166,7 @@ public class DistrictActivity extends Activity implements
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		String newText = s.toString().trim();
-		InputtipsQuery inputquery = new InputtipsQuery(newText, mCityName);
+		InputtipsQuery inputquery = new InputtipsQuery(newText, mQueryCityName);
 		inputquery.setCityLimit(true);
 		Inputtips inputTips = new Inputtips(DistrictActivity.this, inputquery);
 		inputTips.setInputtipsListener(this);
@@ -217,15 +242,15 @@ public class DistrictActivity extends Activity implements
 				List<DistrictItem> district = result.getDistrict();
 
 				if (!isInit) {
-					isInit = true;
 					currentDistrictItem = district.get(0);
+					isInit = true;
 				}
 
 				// 将查询得到的区划的下级区划写入缓存
 				for (int i = 0; i < district.size(); i++) {
 					DistrictItem districtItem = district.get(i);
-					subDistrictMap.put(districtItem.getAdcode(),
-							districtItem.getSubDistrict());
+					Log.d("julian", districtItem.getName());
+					subDistrictMap.put(districtItem.getAdcode(), districtItem.getSubDistrict());
 				}
 				// 获取当前区划的下级区划列表
 				subDistrictList = subDistrictMap.get(currentDistrictItem.getAdcode());
@@ -256,8 +281,8 @@ public class DistrictActivity extends Activity implements
 			sb.append("经纬度:(" + center.getLongitude() + ", "
 					+ center.getLatitude() + ")\n");
 		}
-		mCityName = districtItem.getName();
-		mCityCode = districtItem.getCitycode();
+		mQueryCityName = name;
+		mCurrentCityText.setText(mQueryCityName);
 		return sb.toString();
 	}
 	
@@ -275,11 +300,23 @@ public class DistrictActivity extends Activity implements
 			if (selectedLevel.equalsIgnoreCase(COUNTRY)) {
 				provinceList = subDistrictList;
 				spinnerProvince.setAdapter(adapter);
+				for (int i = 0; i < provinceList.size(); ++i) {
+					if (provinceList.get(i).getName().equals(mCurrentProvinceName)) {
+						spinnerProvince.setSelection(i);
+						break;
+					}
+				}
 			}
 
 			if (selectedLevel.equalsIgnoreCase(PROVINCE)) {
 				cityList = subDistrictList;
 				spinnerCity.setAdapter(adapter);
+				for (int i = 0; i < cityList.size(); ++i) {
+					if (cityList.get(i).getName().equals(mCurrentCityName)) {
+						spinnerCity.setSelection(i);
+						break;
+					}
+				}
 			}
 
 			if (selectedLevel.equalsIgnoreCase(CITY)) {
@@ -290,6 +327,7 @@ public class DistrictActivity extends Activity implements
 //				}
 //				spinnerDistrict.setAdapter(adapter);
 			}
+
 		} else {
 			List<String> emptyNameList = new ArrayList<String>();
 			ArrayAdapter<String> emptyAdapter = new ArrayAdapter<String>(this,
@@ -336,19 +374,20 @@ public class DistrictActivity extends Activity implements
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		DistrictItem districtItem = null;
 		switch (parent.getId()) {
 		case com.run.sg.amap3d.R.id.spinner_province:
 			districtItem = provinceList.get(position);
 			selectedLevel = PROVINCE;
 			getDistrictInfoStr(districtItem);
+			Log.d("julian", "province");
 			break;
 		case com.run.sg.amap3d.R.id.spinner_city:
 			selectedLevel = CITY;
 			districtItem = cityList.get(position);
 			getDistrictInfoStr(districtItem);
+			Log.d("julian", "city");
 			break;
 //		case com.run.sg.amap3d.R.id.spinner_district:
 //			selectedLevel = DISTRICT;
@@ -362,8 +401,7 @@ public class DistrictActivity extends Activity implements
 		if (districtItem != null) {
 			currentDistrictItem = districtItem;
 			// 先查缓存如果缓存存在则直接从缓存中查找，无需再执行查询请求
-			List<DistrictItem> cache = subDistrictMap.get(districtItem
-					.getAdcode());
+			List<DistrictItem> cache = subDistrictMap.get(districtItem.getAdcode());
 			if (null != cache) {
 				setSpinnerView(cache);
 			} else {
