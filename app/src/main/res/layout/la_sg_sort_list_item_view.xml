@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/price_textview"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:text="5¥"
+        android:textColor="#328944"
+        android:textSize="22sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/price_textview"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="深圳嘉达研发大厦停车场"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/address_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="深圳嘉达研发大厦停车场"
+            android:textSize="14sp"
+            android:textColor="#60000000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/vacancy_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="86个"
+            android:textSize="16sp"
+            android:textColor="#980000"/>
+
+        <TextView
+            android:id="@+id/distance_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.32Km"
+            android:textSize="16sp"
+            android:textColor="#60000000"/>
+    </LinearLayout>
+
+</RelativeLayout>

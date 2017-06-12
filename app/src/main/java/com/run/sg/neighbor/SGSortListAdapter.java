@@ -1,0 +1,75 @@
+package com.run.sg.neighbor;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.run.sg.amap3d.R;
+import com.run.sg.model.SGParkingLotItemData;
+
+import java.util.ArrayList;
+
+/**
+ * Created by yq on 2017/6/11.
+ */
+public class SGSortListAdapter extends BaseAdapter {
+    private ArrayList<SGParkingLotItemData> mAllParkingLotItems = new ArrayList<>();
+    private Context mContext;
+
+    public SGSortListAdapter(Context context){
+        mContext = context;
+    }
+
+    public void setData(ArrayList<SGParkingLotItemData> data){
+        //mAllParkingLotItems = data;
+        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return mAllParkingLotItems.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mAllParkingLotItems.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null){
+            convertView = LayoutInflater.from(mContext).
+                    inflate(R.layout.la_sg_sort_list_item_view,null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }else {
+            holder = (ViewHolder)convertView.getTag();
+        }
+        return convertView;
+    }
+
+    private class ViewHolder{
+        TextView mName,mAddress,mPrice,mVacancy,mDistance;
+
+        ViewHolder(View convertView){
+            mName = (TextView)convertView.findViewById(R.id.name_textview);
+            mAddress = (TextView)convertView.findViewById(R.id.address_textview);
+            mPrice = (TextView)convertView.findViewById(R.id.price_textview);
+            mVacancy = (TextView)convertView.findViewById(R.id.vacancy_textview);
+            mDistance = (TextView)convertView.findViewById(R.id.distance_textview);
+        }
+    }
+}
