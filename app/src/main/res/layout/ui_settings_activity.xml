@@ -5,7 +5,7 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/bottom_bar"
+        android:id="@+id/bottom_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -82,7 +82,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_bar">
+        android:layout_above="@id/bottom_bar_layout">
 
         <com.amap.api.maps.MapView
             android:id="@+id/map"
@@ -90,14 +90,14 @@
             android:layout_height="match_parent" />
 
         <LinearLayout
-            android:id="@+id/search_layout_in_main_ui"
+            android:id="@+id/search_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:padding="10dp"
             android:orientation="horizontal"
             android:gravity="center"

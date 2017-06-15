@@ -15,16 +15,16 @@
             android:id="@+id/right_arrow_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:src="@drawable/back"/>
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/search_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="5dp"
             android:layout_gravity="center_vertical"
+            android:inputType="text|textAutoComplete"
             android:padding="5dp"
             android:hint="@string/search_hint_text"
             android:textColorHint="@color/sg_divider_color"
@@ -38,7 +38,9 @@
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/offlinearrow_down"
             android:layout_gravity="center_vertical"
-            android:text="深圳市"
+            android:text="深圳"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/sg_bottom_bar_text_color"/>
     </LinearLayout>
 
@@ -46,5 +48,12 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/sg_divider_color"/>
+
+    <ListView
+        android:id="@+id/input_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/address_text_layout">
+    </ListView>
 
 </LinearLayout>

@@ -32,16 +32,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="导航"
-                android:textColor="@color/red" />
-
-            <Button
-                android:id="@+id/reward"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="打赏"
+                android:text="去这里"
                 android:textColor="@color/red" />
 
         </LinearLayout>

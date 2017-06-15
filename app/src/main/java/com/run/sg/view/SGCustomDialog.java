@@ -58,8 +58,6 @@ public class SGCustomDialog extends Dialog {
         messageTV.setMovementMethod(ScrollingMovementMethod.getInstance());
         Button navigateBtn = (Button) findViewById(R.id.navigate);
         navigateBtn.setOnClickListener(new MyClickListener());
-        Button rewardBtn = (Button) findViewById(R.id.reward);
-        rewardBtn.setOnClickListener(new MyClickListener());
         ImageButton dialogClose = (ImageButton) findViewById(R.id.dialog_close);
         dialogClose.setOnClickListener(new MyClickListener());
 
@@ -85,9 +83,6 @@ public class SGCustomDialog extends Dialog {
             switch (v.getId()) {
                 case R.id.navigate:
                     mButtonClickListener.doNavigate();
-                    break;
-                case R.id.reward:
-                    mButtonClickListener.doReward();
                     break;
                 case R.id.dialog_close:
                     mButtonClickListener.doCancel();

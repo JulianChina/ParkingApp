@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,13 +32,13 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeAddress;
-import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
@@ -50,12 +49,17 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkPath;
 import com.amap.api.services.route.WalkRouteResult;
 import com.run.sg.amap3d.R;
+import com.run.sg.amap3d.route.DriveRouteActivity;
 import com.run.sg.amap3d.route.WalkRouteDetailActivity;
 import com.run.sg.amap3d.util.AMapUtil;
 import com.run.sg.amap3d.util.SensorEventHelper;
 import com.run.sg.amap3d.util.ToastUtil;
-import com.run.sg.mainui.SGMainUI;
 import com.run.sg.navigation.WalkRouteCalculateActivity;
+import com.run.sg.neighbor.SGNeighborActivity;
+import com.run.sg.parking.SGParkingActivity;
+import com.run.sg.pickup.SGPickUpActivity;
+import com.run.sg.search.SGMainSearchActivity;
+import com.run.sg.util.CurrentPosition;
 import com.run.sg.view.SGCustomDialog;
 
 import java.util.ArrayList;
@@ -85,9 +89,17 @@ public class UiSettingsActivity extends Activity implements
     public static final String LOCATION_MARKER_FLAG = "mylocation";
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
-    private double mStartPointLat = 0.0;
-    private double mStartPointLon = 0.0;
     private LatLonPoint mStartPoint;
+
+    public String getCurrentCityName() {
+        return mCurrentCityName;
+    }
+
+    public void setCurrentCityName(String mCurrentCityName) {
+        this.mCurrentCityName = mCurrentCityName;
+    }
+
+    private String mCurrentCityName = "深圳";
     private double mEndPointLat = 0.0;
     private double mEndPointLon = 0.0;
     private LatLonPoint mEndPoint;
@@ -97,26 +109,15 @@ public class UiSettingsActivity extends Activity implements
     private WalkRouteResult mWalkRouteResult;
     private TextView mRouteTimeDes, mRouteDetailDes;
     private Button mNavigateBtn;
-    private String[] mDonatePointString = new String[]{
-            "南山区桃园路293号前海西部人力资源市场1楼",
-            "南山区桃园路293号前海西部人力资源市场1楼",
-            "南头街98号南头街道办事处",
-            "南山区南头城中山东街80号二楼",
-            "南山区常兴路常兴新村906号",
-            "南山区前海路3168号大新前海商业中心二楼201-202",
-            "南山区南苑新村商业1栋二楼206-209",
-            "南山区红花西路南山豪庭203",
-            "南山区南头关口一路南富苑11栋107-108",
-            "南山区马家龙荔园新村10栋一楼1-3号",
-            "南山区玉泉路莲城花园11楼一楼"};
     private List<LatLonPoint> mDonatePointLatLan = new ArrayList<LatLonPoint>();
-    private ProgressDialog progDialog = null;
-    private GeocodeSearch geocoderSearch;
-    private DonatePointQueryAsyncTask mDonatePointQueryAsyncTask;
+
     private boolean mQueryFlag = true;
 
-    SGMainUI mSGMainUI;
-    private LinearLayout mBottomBar;
+    private LinearLayout mBottomBarLayout;
+    private LinearLayout mNeighborLayout;
+    private LinearLayout mParkingLayout;
+    private LinearLayout mPickUpLayout;
+    private LinearLayout mSearchLayout;
     private RelativeLayout mBottomLayout;
 
     @Override
@@ -125,13 +126,72 @@ public class UiSettingsActivity extends Activity implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.ui_settings_activity);
         mContext = this.getApplicationContext();
-        mSGMainUI = new SGMainUI(UiSettingsActivity.this, (RelativeLayout) findViewById(R.id.map_container));
-        mSGMainUI.initMainUI();
-        mBottomBar = (LinearLayout) findViewById(R.id.bottom_bar);
+
+        mBottomBarLayout = (LinearLayout) findViewById(R.id.bottom_bar_layout);
+        mNeighborLayout = (LinearLayout) findViewById(R.id.neighbor_layout);
+        mNeighborLayout.setOnClickListener(mClickListener);
+        mParkingLayout = (LinearLayout) findViewById(R.id.parking_layout);
+        mParkingLayout.setOnClickListener(mClickListener);
+        mPickUpLayout = (LinearLayout) findViewById(R.id.pick_up_layout);
+        mPickUpLayout.setOnClickListener(mClickListener);
+        mSearchLayout = (LinearLayout) findViewById(R.id.search_layout);
+        mSearchLayout.setOnClickListener(mClickListener);
+
         mapView = (MapView) findViewById(com.run.sg.amap3d.R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         registerListener();
+    }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            switch (id){
+                case R.id.neighbor_layout:
+                    startActivity(new Intent(UiSettingsActivity.this, SGNeighborActivity.class));
+                    break;
+                case R.id.parking_layout:
+                    startActivity(new Intent(UiSettingsActivity.this, SGParkingActivity.class));
+                    break;
+                case R.id.pick_up_layout:
+                    startActivity(new Intent(UiSettingsActivity.this, SGPickUpActivity.class));
+                    break;
+                case R.id.search_layout:
+                    Intent intent = new Intent(UiSettingsActivity.this, SGMainSearchActivity.class);
+                    intent.putExtra("city_name", getCurrentCityName());
+                    UiSettingsActivity.this.startActivityForResult(intent, 0);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (0 == requestCode && 0 == requestCode) {
+            aMap.clear();
+            aMap.addMarker(mLocMarker.getOptions());
+            mEndPointLat = data.getDoubleExtra("searchPointLat", 0.0);
+            mEndPointLon = data.getDoubleExtra("searchPointLon", 0.0);
+            Log.d("julian", "" + mEndPointLat + ":" + mEndPointLon);
+            if (mEndPointLat > 0.0 && mEndPointLon > 0.0) {
+                Marker localGeoMarker = aMap.addMarker(new MarkerOptions().anchor(1.0f, 1.0f)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .position(new LatLng(mEndPointLat, mEndPointLon))
+                        .title("目的地"));
+                if (CurrentPosition.mCurrentPointLat > 0.0 && CurrentPosition.mCurrentPointLon > 0.0) {
+                    // 设置所有maker显示在当前可视区域地图中
+                    LatLngBounds bounds = new LatLngBounds.Builder()
+                            .include(new LatLng(CurrentPosition.mCurrentPointLat, CurrentPosition.mCurrentPointLon))
+                            .include(new LatLng(mEndPointLat, mEndPointLon)).build();
+                    aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 12));
+
+                }
+            }
+        }
     }
 
     /**
@@ -186,6 +246,70 @@ public class UiSettingsActivity extends Activity implements
         aMap.setMyLocationEnabled(flag);  // 可触发定位并显示定位层
     }
 
+    private void registerListener() {
+        aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+            }
+        });
+
+        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker != null) {
+                    showDialog(marker);
+                } else {
+                    Toast.makeText(UiSettingsActivity.this, "error marker click", Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 点击marker显示弹框
+     */
+    void showDialog(final Marker marker) {
+        String title = "This is title";
+        String message = "This is content";
+        final SGCustomDialog mCustomDialog = new SGCustomDialog(UiSettingsActivity.this, title, message);
+        mCustomDialog.setCanceledOnTouchOutside(false);
+        mCustomDialog.setListener(new SGCustomDialog.ButtonClickListener() {
+            @Override
+            public void doNavigate() {
+                try {
+                    LatLng endPoint = marker.getPosition();
+                    mEndPointLat = endPoint.latitude;
+                    mEndPointLon = endPoint.longitude;
+                    mEndPoint = new LatLonPoint(mEndPointLat, mEndPointLon);
+                    mStartPoint = new LatLonPoint(CurrentPosition.mCurrentPointLat, CurrentPosition.mCurrentPointLon);
+                    Intent intent = new Intent(UiSettingsActivity.this, DriveRouteActivity.class);
+                    intent.putExtra("driveRouteCurrentLat", CurrentPosition.mCurrentPointLat);
+                    intent.putExtra("driveRouteCurrentLon", CurrentPosition.mCurrentPointLon);
+                    intent.putExtra("driveRouteEndLat", mEndPointLat);
+                    intent.putExtra("driveRouteEndLon", mEndPointLon);
+                    startActivity(intent);
+//                    routePlan(mStartPoint, mEndPoint);
+                } catch (Exception e) {
+                    Toast.makeText(mContext, "doRoutePlan error", Toast.LENGTH_SHORT).show();
+                }
+                mCustomDialog.dismiss();
+            }
+
+            @Override
+            public void doReward() {
+                Toast.makeText(mContext, "doReward", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void doCancel() {
+                mCustomDialog.dismiss();
+            }
+        });
+
+        mCustomDialog.show();
+    }
+
     /**
      * 方法必须重写
      */
@@ -205,8 +329,8 @@ public class UiSettingsActivity extends Activity implements
         if (mSensorHelper != null) {
             mSensorHelper.registerSensorListener();
         }
-        if (mBottomBar != null) {
-            mBottomBar.setVisibility(View.VISIBLE);
+        if (mBottomBarLayout != null) {
+            mBottomBarLayout.setVisibility(View.VISIBLE);
         }
         if (mBottomLayout != null) {
             mBottomLayout.setVisibility(View.GONE);
@@ -250,8 +374,9 @@ public class UiSettingsActivity extends Activity implements
                 LatLng location = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
                 if (!mFirstFix) {
                     mFirstFix = true;
-                    mStartPointLat = amapLocation.getLatitude();
-                    mStartPointLon = amapLocation.getLongitude();
+                    CurrentPosition.mCurrentPointLat = amapLocation.getLatitude();
+                    CurrentPosition.mCurrentPointLon = amapLocation.getLongitude();
+                    mCurrentCityName = amapLocation.getCity();
                     addCircle(location, amapLocation.getAccuracy());//添加定位精度圆
                     addMarker(location);//添加定位图标
                     mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
@@ -329,42 +454,7 @@ public class UiSettingsActivity extends Activity implements
         mLocationClient = null;
     }
 
-    private void registerListener() {
-		aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-			@Override
-			public void onMapClick(LatLng latLng) {
-			}
-		});
 
-        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (marker != null) {
-                    showDialog(marker);
-                } else {
-                    Toast.makeText(UiSettingsActivity.this, "error marker click", Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-        });
-//		aMap.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
-//			@Override
-//			public void onInfoWindowClick(Marker marker) {
-//
-//			}
-//		});
-//		aMap.setInfoWindowAdapter(new AMap.InfoWindowAdapter() {
-//			@Override
-//			public View getInfoWindow(Marker marker) {
-//				return null;
-//			}
-//
-//			@Override
-//			public View getInfoContents(Marker marker) {
-//				return null;
-//			}
-//		});
-    }
 
     private void routePlan(LatLonPoint startPoint, LatLonPoint endPoint) {
         initRoutePlan();
@@ -426,7 +516,7 @@ public class UiSettingsActivity extends Activity implements
     /**
      * 隐藏进度框
      */
-    private void dissmissProgressDialog() {
+    private void dismissProgressDialog() {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
@@ -450,7 +540,7 @@ public class UiSettingsActivity extends Activity implements
 
     @Override
     public void onWalkRouteSearched(WalkRouteResult result, int errorCode) {
-        dissmissProgressDialog();
+        dismissProgressDialog();
         aMap.clear();// 清理地图上的所有覆盖物
         if (errorCode == AMapException.CODE_AMAP_SUCCESS) {
             if (result != null && result.getPaths() != null) {
@@ -470,7 +560,7 @@ public class UiSettingsActivity extends Activity implements
                     String des = AMapUtil.getFriendlyTime(dur) + "(" + AMapUtil.getFriendlyLength(dis) + ")";
                     mRouteTimeDes.setText(des);
                     mRouteDetailDes.setVisibility(View.GONE);
-                    mBottomBar.setVisibility(View.GONE);
+                    mBottomBarLayout.setVisibility(View.GONE);
                     mBottomLayout.setVisibility(View.VISIBLE);
                     mBottomLayout.setOnClickListener(new OnClickListener() {
                         @Override
@@ -485,9 +575,9 @@ public class UiSettingsActivity extends Activity implements
                         @Override
                         public void onClick(View v) {
                             Intent naviIntent = new Intent(UiSettingsActivity.this, WalkRouteCalculateActivity.class);
-                            if (mStartPointLat > 0.0 && mStartPointLon > 0.0 && mEndPointLat > 0.0 && mEndPointLon > 0.0) {
-                                naviIntent.putExtra("startPointLat", mStartPointLat);
-                                naviIntent.putExtra("startPointLon", mStartPointLon);
+                            if (CurrentPosition.mCurrentPointLat > 0.0 && CurrentPosition.mCurrentPointLon > 0.0 && mEndPointLat > 0.0 && mEndPointLon > 0.0) {
+                                naviIntent.putExtra("startPointLat", CurrentPosition.mCurrentPointLat);
+                                naviIntent.putExtra("startPointLon", CurrentPosition.mCurrentPointLon);
                                 naviIntent.putExtra("endPointLat", mEndPointLat);
                                 naviIntent.putExtra("endPointLon", mEndPointLon);
                                 startActivity(naviIntent);
@@ -507,63 +597,6 @@ public class UiSettingsActivity extends Activity implements
         }
     }
 
-    class DonatePointQueryAsyncTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            initQuery();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            getLatlon();
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (aMap == null) {
-                aMap = mapView.getMap();
-            }
-            if (mDonatePointLatLan != null && !mDonatePointLatLan.isEmpty()) {
-                for (int i = 0; i < mDonatePointLatLan.size(); ++i) {
-                    Marker localGeoMarker = aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                            .position(new LatLng(mDonatePointLatLan.get(i).getLatitude(), mDonatePointLatLan.get(i).getLongitude()))
-                            .title(mDonatePointString[i]));
-                }
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(mDonatePointLatLan.get(0).getLatitude(), mDonatePointLatLan.get(0).getLongitude()), 14));
-            }
-            dismissDialog();
-        }
-    }
-
-    private void initQuery() {
-        geocoderSearch = new GeocodeSearch(this);
-        geocoderSearch.setOnGeocodeSearchListener(this);
-        progDialog = new ProgressDialog(this);
-        showDialog();
-    }
-
-    /**
-     * 响应地理编码
-     */
-    private void getLatlon() {
-        for (int i = 0; i < mDonatePointString.length; ++i) {
-            GeocodeQuery query = new GeocodeQuery("深圳市" + mDonatePointString[i], "0755");// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
-            geocoderSearch.getFromLocationNameAsyn(query);// 设置同步地理编码请求
-            mQueryFlag = false;
-            while (!mQueryFlag) {
-            }
-        }
-    }
 
     /**
      * 地理编码查询回调
@@ -592,63 +625,5 @@ public class UiSettingsActivity extends Activity implements
 
     }
 
-    /**
-     * 显示进度条对话框
-     */
-    private void showDialog() {
-        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progDialog.setIndeterminate(false);
-        progDialog.setCancelable(true);
-        progDialog.setMessage("正在获取地址");
-        progDialog.show();
-    }
 
-    /**
-     * 隐藏进度条对话框
-     */
-    private void dismissDialog() {
-        if (progDialog != null) {
-            progDialog.dismiss();
-        }
-    }
-
-    /**
-     * 点击marker显示弹框
-     */
-    void showDialog(final Marker marker) {
-//        String title = marker.getTitle();
-//        String message = marker.getSnippet();
-        String title = "This is title";
-        String message = "This is content\nd\nf\nj\nd\nk\nl\nk\nk\nk\nk\nk\nk\nd\nf\nl\nk\nk\nk\nk\nk";
-        final SGCustomDialog mCustomDialog = new SGCustomDialog(UiSettingsActivity.this, title, message);
-        mCustomDialog.setCanceledOnTouchOutside(false);
-        mCustomDialog.setListener(new SGCustomDialog.ButtonClickListener() {
-            @Override
-            public void doNavigate() {
-                try {
-                    LatLng endPoint = marker.getPosition();
-                    mEndPointLat = endPoint.latitude;
-                    mEndPointLon = endPoint.longitude;
-                    mEndPoint = new LatLonPoint(mEndPointLat, mEndPointLon);
-                    mStartPoint = new LatLonPoint(mStartPointLat, mStartPointLon);
-                    routePlan(mStartPoint, mEndPoint);
-                } catch (Exception e) {
-                    Toast.makeText(mContext, "doRoutePlan error", Toast.LENGTH_SHORT).show();
-                }
-                mCustomDialog.dismiss();
-            }
-
-            @Override
-            public void doReward() {
-                Toast.makeText(mContext, "doReward", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void doCancel() {
-                mCustomDialog.dismiss();
-            }
-        });
-
-        mCustomDialog.show();
-    }
 }

@@ -39,27 +39,37 @@ import overlay.DrivingRouteOverlay;
 /**
  * 驾车出行路线规划 实现
  */
-public class DriveRouteActivity extends Activity implements OnMapClickListener, 
-OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
+public class DriveRouteActivity extends Activity implements OnMapClickListener,
+		OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
 	private AMap aMap;
 	private MapView mapView;
 	private Context mContext;
 	private RouteSearch mRouteSearch;
 	private DriveRouteResult mDriveRouteResult;
-	private LatLonPoint mStartPoint = new LatLonPoint(39.942295,116.335891);//起点，39.942295,116.335891
-	private LatLonPoint mEndPoint = new LatLonPoint(39.995576,116.481288);//终点，39.995576,116.481288
-	
+	private double mStartPointLat = 0.0;
+	private double mStartPointLon = 0.0;
+	private double mEndPointLat = 0.0;
+	private double mEndPointLon = 0.0;
+	private LatLonPoint mStartPoint;
+	private LatLonPoint mEndPoint;
+
 	private final int ROUTE_TYPE_DRIVE = 2;
-	
+
 	private RelativeLayout mBottomLayout, mHeadLayout;
-	private TextView mRotueTimeDes, mRouteDetailDes;
+	private TextView mRouteTimeDes, mRouteDetailDes;
 	private ProgressDialog progDialog = null;// 搜索时进度条
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.route_activity);
-		
 		mContext = this.getApplicationContext();
+		Intent intent = getIntent();
+		mStartPointLat = intent.getDoubleExtra("driveRouteCurrentLat", 0.0);
+		mStartPointLon = intent.getDoubleExtra("driveRouteCurrentLon", 0.0);
+		mEndPointLat = intent.getDoubleExtra("driveRouteEndLat", 0.0);
+		mEndPointLon = intent.getDoubleExtra("driveRouteEndLon", 0.0);
+		mStartPoint = new LatLonPoint(mStartPointLat, mStartPointLon);
+		mEndPoint = new LatLonPoint(mEndPointLat, mEndPointLon);
 		mapView = (MapView) findViewById(R.id.route_map);
 		mapView.onCreate(bundle);// 此方法必须重写
 		init();
@@ -69,11 +79,11 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 
 	private void setfromandtoMarker() {
 		aMap.addMarker(new MarkerOptions()
-		.position(AMapUtil.convertToLatLng(mStartPoint))
-		.icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+				.position(AMapUtil.convertToLatLng(mStartPoint))
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
 		aMap.addMarker(new MarkerOptions()
-		.position(AMapUtil.convertToLatLng(mEndPoint))
-		.icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));		
+				.position(AMapUtil.convertToLatLng(mEndPoint))
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
 	}
 
 	/**
@@ -81,14 +91,14 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 	 */
 	private void init() {
 		if (aMap == null) {
-			aMap = mapView.getMap();	
+			aMap = mapView.getMap();
 		}
 		registerListener();
 		mRouteSearch = new RouteSearch(this);
 		mRouteSearch.setRouteSearchListener(this);
 		mBottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
 		mHeadLayout = (RelativeLayout)findViewById(R.id.routemap_header);
-		mRotueTimeDes = (TextView) findViewById(R.id.firstline);
+		mRouteTimeDes = (TextView) findViewById(R.id.firstline);
 		mRouteDetailDes = (TextView) findViewById(R.id.secondline);
 		mHeadLayout.setVisibility(View.GONE);
 	}
@@ -101,7 +111,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 		aMap.setOnMarkerClickListener(DriveRouteActivity.this);
 		aMap.setOnInfoWindowClickListener(DriveRouteActivity.this);
 		aMap.setInfoWindowAdapter(DriveRouteActivity.this);
-		
+
 	}
 
 	@Override
@@ -119,7 +129,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -131,9 +141,9 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 	@Override
 	public void onMapClick(LatLng arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * 开始搜索路径规划方案
 	 */
@@ -157,7 +167,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 
 	@Override
 	public void onBusRouteSearched(BusRouteResult result, int errorCode) {
-		
+
 	}
 
 	@Override
@@ -183,7 +193,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 					int dis = (int) drivePath.getDistance();
 					int dur = (int) drivePath.getDuration();
 					String des = AMapUtil.getFriendlyTime(dur)+"("+AMapUtil.getFriendlyLength(dis)+")";
-					mRotueTimeDes.setText(des);
+					mRouteTimeDes.setText(des);
 					mRouteDetailDes.setVisibility(View.VISIBLE);
 					int taxiCost = (int) mDriveRouteResult.getTaxiCost();
 					mRouteDetailDes.setText("打车约"+taxiCost+"元");
@@ -198,7 +208,7 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 							startActivity(intent);
 						}
 					});
-					
+
 				} else if (result != null && result.getPaths() == null) {
 					ToastUtil.show(mContext, R.string.no_result);
 				}
@@ -209,15 +219,15 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 		} else {
 			ToastUtil.showerror(this.getApplicationContext(), errorCode);
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void onWalkRouteSearched(WalkRouteResult result, int errorCode) {
-		
+
 	}
-	
+
 
 	/**
 	 * 显示进度框
@@ -225,12 +235,12 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 	private void showProgressDialog() {
 		if (progDialog == null)
 			progDialog = new ProgressDialog(this);
-		    progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		    progDialog.setIndeterminate(false);
-		    progDialog.setCancelable(true);
-		    progDialog.setMessage("正在搜索");
-		    progDialog.show();
-	    }
+		progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progDialog.setIndeterminate(false);
+		progDialog.setCancelable(true);
+		progDialog.setMessage("正在搜索");
+		progDialog.show();
+	}
 
 	/**
 	 * 隐藏进度框
@@ -280,8 +290,8 @@ OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSear
 	@Override
 	public void onRideRouteSearched(RideRouteResult arg0, int arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }
 

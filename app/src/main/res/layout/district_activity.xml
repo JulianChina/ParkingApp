@@ -59,29 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:text="去这里"
+            android:text="确定"
             android:textSize="14sp" />
-        <AutoCompleteTextView
-            android:id="@+id/text_street"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignBaseline="@id/btn_confirm"
-            android:layout_toLeftOf="@id/btn_confirm"
-            android:inputType="text|textAutoComplete"
-            android:background="@color/transparent"
-            android:singleLine="true"
-            android:hint="请输入地址"
-            android:text=""
-            android:textSize="14sp"
-            android:textColor="@color/black" />
+
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/input_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/address_text_layout">
-    </ListView>
 
 </RelativeLayout>
