@@ -58,8 +58,9 @@ public class SGSortListAdapter extends BaseAdapter {
     private void setValue(ViewHolder holder, int position) {
         holder.mName.setText(mAllParkingLotItems.get(position).getName());
         holder.mAddress.setText(mAllParkingLotItems.get(position).getAddress());
-        holder.mPrice.setText("" + mAllParkingLotItems.get(position).getPrice());
-        holder.mVacancy.setText("" + mAllParkingLotItems.get(position).getVacancy());
+        holder.mVacancy.setText("" + mAllParkingLotItems.get(position).getLeft()
+                + "/" + mAllParkingLotItems.get(position).getVacancy());
+        holder.mPrice.setText("￥" + mAllParkingLotItems.get(position).getPrice());
         holder.mDistance.setText("" + mAllParkingLotItems.get(position).getDistance() + "Km");
     }
 
@@ -69,8 +70,8 @@ public class SGSortListAdapter extends BaseAdapter {
         ViewHolder(View convertView){
             mName = (TextView)convertView.findViewById(R.id.name_textview);
             mAddress = (TextView)convertView.findViewById(R.id.address_textview);
-            mPrice = (TextView)convertView.findViewById(R.id.price_textview);
             mVacancy = (TextView)convertView.findViewById(R.id.vacancy_textview);
+            mPrice = (TextView)convertView.findViewById(R.id.price_textview);
             mDistance = (TextView)convertView.findViewById(R.id.distance_textview);
         }
     }

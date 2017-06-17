@@ -62,6 +62,9 @@ public class UiSettingsActivity extends Activity implements
     public static final String LOCATION_MARKER_FLAG = "mylocation";
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
+
+    private String mCurrentCityName = "深圳";
+
     public String getCurrentCityName() {
         return mCurrentCityName;
     }
@@ -69,8 +72,6 @@ public class UiSettingsActivity extends Activity implements
     public void setCurrentCityName(String mCurrentCityName) {
         this.mCurrentCityName = mCurrentCityName;
     }
-
-    private String mCurrentCityName = "深圳";
 
     private double mEndPointLat = 0.0;
     private double mEndPointLon = 0.0;
@@ -144,13 +145,14 @@ public class UiSettingsActivity extends Activity implements
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                         .position(new LatLng(mEndPointLat, mEndPointLon))
                         .title("目的地"));
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mEndPointLat, mEndPointLon)));
                 if (CurrentPosition.mCurrentPointLat > 0.0 && CurrentPosition.mCurrentPointLon > 0.0) {
                     // 设置所有maker显示在当前可视区域地图中
                     LatLngBounds bounds = new LatLngBounds.Builder()
                             .include(new LatLng(CurrentPosition.mCurrentPointLat, CurrentPosition.mCurrentPointLon))
                             .include(new LatLng(mEndPointLat, mEndPointLon)).build();
                     aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 12));
-
+                    aMap.moveCamera(CameraUpdateFactory.zoomOut());
                 }
             }
         }
@@ -243,8 +245,6 @@ public class UiSettingsActivity extends Activity implements
                     LatLng endPoint = marker.getPosition();
                     mEndPointLat = endPoint.latitude;
                     mEndPointLon = endPoint.longitude;
-                    mEndPoint = new LatLonPoint(mEndPointLat, mEndPointLon);
-                    mStartPoint = new LatLonPoint(CurrentPosition.mCurrentPointLat, CurrentPosition.mCurrentPointLon);
                     Intent intent = new Intent(UiSettingsActivity.this, DriveRouteActivity.class);
                     intent.putExtra("driveRouteCurrentLat", CurrentPosition.mCurrentPointLat);
                     intent.putExtra("driveRouteCurrentLon", CurrentPosition.mCurrentPointLon);

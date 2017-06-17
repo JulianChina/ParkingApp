@@ -11,17 +11,13 @@ import android.view.MenuItem;
 
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.services.core.LatLonPoint;
 import com.run.sg.amap3d.R;
-import com.run.sg.amap3d.util.AMapUtil;
 import com.run.sg.db.ParkInfoTable;
 import com.run.sg.model.SGParkingLotItemData;
 import com.run.sg.util.CurrentPosition;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -153,12 +149,15 @@ public class SGNeighborActivity extends FragmentActivity
         @Override
         protected Void doInBackground(Void... params) {
             for (String[] temp : ParkInfoTable.defaultParkInfo) {
+                double latitude = Double.valueOf(temp[2]);
+                double longitude = Double.valueOf(temp[3]);
                 double distance = AMapUtils.calculateLineDistance(mCurrentPoint,
-                        new LatLng(Double.valueOf(temp[2]), Double.valueOf(temp[3])));
+                        new LatLng(latitude, longitude));
                 distance /= 1000.0;
                 distance = Double.valueOf(df.format(distance));
-                mData.add(new SGParkingLotItemData(temp[0], temp[1], Double.valueOf(temp[5]),
-                        distance, Integer.valueOf(temp[4])));
+                mData.add(new SGParkingLotItemData(temp[0], temp[1], latitude, longitude,
+                        Integer.valueOf(temp[4]), Integer.valueOf(temp[5]),
+                        Double.valueOf(temp[6]), distance));
             }
             return null;
         }
@@ -166,7 +165,7 @@ public class SGNeighborActivity extends FragmentActivity
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dissmissProgressDialog();
+            dismissProgressDialog();
         }
     }
 
@@ -180,7 +179,7 @@ public class SGNeighborActivity extends FragmentActivity
         mProgressDialog.show();
     }
 
-    private void dissmissProgressDialog() {
+    private void dismissProgressDialog() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
