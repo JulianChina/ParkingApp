@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
@@ -97,6 +98,9 @@ public class SGMainSearchActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mKeywordText.setText(mListAddress.get(position));
                 mSearchPoint = mListLatLonPoint.get(position);
+                Log.d("julian", "(lat,lon):" + mListLatLonPoint.get(position).getLatitude()
+                        + "," + mListLatLonPoint.get(position).getLongitude());
+                Log.d("julian", "address:" + mListAddress.get(position));
                 mListAddress.clear();
                 mListLatLonPoint.clear();
                 Intent routePlanIntent = new Intent(SGMainSearchActivity.this, UiSettingsActivity.class);
@@ -162,10 +166,10 @@ public class SGMainSearchActivity extends Activity
             for (int i = 0; i < tipList.size(); i++) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("name", tipList.get(i).getName());
-                map.put("address", tipList.get(i).getDistrict());
+                map.put("address", tipList.get(i).getDistrict() + ":" + tipList.get(i).getAddress());
                 listString.add(map);
                 mListLatLonPoint.add(tipList.get(i).getPoint());
-                mListAddress.add(tipList.get(i).getName());
+                mListAddress.add(tipList.get(i).getDistrict() + ":" + tipList.get(i).getAddress());
             }
             SimpleAdapter aAdapter = new SimpleAdapter(getApplicationContext(), listString, com.run.sg.amap3d.R.layout.item_layout,
                     new String[] {"name","address"}, new int[] {com.run.sg.amap3d.R.id.poi_field_id, com.run.sg.amap3d.R.id.poi_value_id});

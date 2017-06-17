@@ -139,7 +139,6 @@ public class UiSettingsActivity extends Activity implements
             aMap.addMarker(mLocMarker.getOptions());
             mEndPointLat = data.getDoubleExtra("searchPointLat", 0.0);
             mEndPointLon = data.getDoubleExtra("searchPointLon", 0.0);
-            Log.d("julian", "" + mEndPointLat + ":" + mEndPointLon);
             if (mEndPointLat > 0.0 && mEndPointLon > 0.0) {
                 Marker localGeoMarker = aMap.addMarker(new MarkerOptions().anchor(1.0f, 1.0f)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))

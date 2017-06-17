@@ -7,11 +7,11 @@ public class SGParkingLotItemData {
 
     private String mName;
     private String mAddress;
-    private int mPrice;
+    private double mPrice;
     private double mDistance;
     private int mVacancy;
 
-    public SGParkingLotItemData(String name,String address,int price,double distance,int vacancy){
+    public SGParkingLotItemData(String name, String address, double price, double distance, int vacancy){
         this.mName = name;
         this.mAddress = address;
         this.mPrice = price;
@@ -27,7 +27,7 @@ public class SGParkingLotItemData {
         return mAddress;
     }
 
-    public int getPrice(){
+    public double getPrice(){
         return mPrice;
     }
 

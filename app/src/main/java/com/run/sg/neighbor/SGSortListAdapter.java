@@ -11,25 +11,18 @@ import com.run.sg.amap3d.R;
 import com.run.sg.model.SGParkingLotItemData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yq on 2017/6/11.
  */
 public class SGSortListAdapter extends BaseAdapter {
-    private ArrayList<SGParkingLotItemData> mAllParkingLotItems = new ArrayList<>();
+    private List<SGParkingLotItemData> mAllParkingLotItems = new ArrayList<>();
     private Context mContext;
 
-    public SGSortListAdapter(Context context){
+    public SGSortListAdapter(Context context, List<SGParkingLotItemData> data){
         mContext = context;
-    }
-
-    public void setData(ArrayList<SGParkingLotItemData> data){
-        //mAllParkingLotItems = data;
-        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
-        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
-        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
-        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
-        mAllParkingLotItems.add(new SGParkingLotItemData("姓名","地址",1,1,1));
+        mAllParkingLotItems = data;
     }
 
     @Override
@@ -58,7 +51,16 @@ public class SGSortListAdapter extends BaseAdapter {
         }else {
             holder = (ViewHolder)convertView.getTag();
         }
+        setValue(holder, position);
         return convertView;
+    }
+
+    private void setValue(ViewHolder holder, int position) {
+        holder.mName.setText(mAllParkingLotItems.get(position).getName());
+        holder.mAddress.setText(mAllParkingLotItems.get(position).getAddress());
+        holder.mPrice.setText("" + mAllParkingLotItems.get(position).getPrice());
+        holder.mVacancy.setText("" + mAllParkingLotItems.get(position).getVacancy());
+        holder.mDistance.setText("" + mAllParkingLotItems.get(position).getDistance() + "Km");
     }
 
     private class ViewHolder{
