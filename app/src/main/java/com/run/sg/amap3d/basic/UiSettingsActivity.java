@@ -75,8 +75,6 @@ public class UiSettingsActivity extends Activity implements
 
     private double mEndPointLat = 0.0;
     private double mEndPointLon = 0.0;
-    private LatLonPoint mStartPoint;
-    private LatLonPoint mEndPoint;
 
     private LinearLayout mBottomBarLayout;
     private LinearLayout mNeighborLayout;
@@ -135,6 +133,9 @@ public class UiSettingsActivity extends Activity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
         if (0 == requestCode && 0 == requestCode) {
             aMap.clear();
             aMap.addMarker(mLocMarker.getOptions());
@@ -206,7 +207,7 @@ public class UiSettingsActivity extends Activity implements
         mUiSettings.setScaleControlsEnabled(flag);  //设置地图默认的比例尺显示
         mUiSettings.setZoomControlsEnabled(flag);  //设置地图默认的缩放按钮显示
         mUiSettings.setCompassEnabled(flag);  //设置地图默认的指南针显示
-        mUiSettings.setMyLocationButtonEnabled(flag);  // 显示默认的定位按钮
+        mUiSettings.setMyLocationButtonEnabled(!flag);  // 显示默认的定位按钮
         aMap.setMyLocationEnabled(flag);  // 可触发定位并显示定位层
     }
 

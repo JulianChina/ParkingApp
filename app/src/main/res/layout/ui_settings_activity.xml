@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true"
         android:paddingBottom="5dp"
         android:minHeight="60dp"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/bg_bottom_bar">
 
@@ -19,18 +19,18 @@
             android:id="@+id/neighbor_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/ic_sg_mainui_find"
-                android:gravity="center_horizontal"
-                android:textSize="12sp"
-                android:textColor="@color/sg_bottom_bar_text_color"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/blue"
                 android:clickable="false"
                 android:text="@string/neighbor_text"/>
 
@@ -40,18 +40,17 @@
             android:id="@+id/parking_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/ic_sg_mainui_good_you"
-                android:gravity="center_horizontal"
-                android:textSize="12sp"
+                android:gravity="center"
+                android:textSize="16sp"
                 android:clickable="false"
-                android:textColor="@color/sg_bottom_bar_text_color"
+                android:textColor="@color/blue"
                 android:text="@string/parking_text"/>
 
         </LinearLayout>
@@ -60,7 +59,7 @@
             android:id="@+id/pick_up_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:onClick="">
@@ -68,10 +67,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/ic_sg_about_us"
-                android:gravity="center_horizontal"
-                android:textSize="12sp"
-                android:textColor="@color/sg_bottom_bar_text_color"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/blue"
                 android:clickable="false"
                 android:text="@string/pick_up_text"/>
 
@@ -79,44 +77,46 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/sg_divider_color">
+
+        <ImageView
+            android:id="@+id/fake_search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/search_icon_white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索"
+            android:textSize="16sp"
+            android:textColor="@color/sg_bottom_bar_bac"/>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_bar_layout">
+        android:layout_above="@id/bottom_bar_layout"
+        android:layout_below="@id/search_layout">
 
         <com.amap.api.maps.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:id="@+id/search_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:padding="10dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@color/sg_divider_color">
 
-            <ImageView
-                android:id="@+id/fake_search_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/search_icon_white"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="搜索"
-                android:textSize="16sp"
-                android:textColor="@color/sg_bottom_bar_bac"/>
-        </LinearLayout>
 
         <ImageButton
             android:id="@+id/upload"
