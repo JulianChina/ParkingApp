@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.InfoWindowAdapter;
@@ -33,6 +35,7 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.util.AMapUtil;
 import com.run.sg.amap3d.util.ToastUtil;
+import com.run.sg.navigation.SingleRouteCalculateActivity;
 
 import overlay.DrivingRouteOverlay;
 
@@ -57,6 +60,7 @@ public class DriveRouteActivity extends Activity implements OnMapClickListener,
 
 	private RelativeLayout mBottomLayout, mHeadLayout;
 	private TextView mRouteTimeDes, mRouteDetailDes;
+	private Button mNavigateBtn;
 	private ProgressDialog progDialog = null;// 搜索时进度条
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -97,6 +101,7 @@ public class DriveRouteActivity extends Activity implements OnMapClickListener,
 		mRouteSearch = new RouteSearch(this);
 		mRouteSearch.setRouteSearchListener(this);
 		mBottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
+		mNavigateBtn = (Button) findViewById(R.id.navigate_btn);
 		mHeadLayout = (RelativeLayout)findViewById(R.id.routemap_header);
 		mRouteTimeDes = (TextView) findViewById(R.id.firstline);
 		mRouteDetailDes = (TextView) findViewById(R.id.secondline);
@@ -190,6 +195,7 @@ public class DriveRouteActivity extends Activity implements OnMapClickListener,
 					drivingRouteOverlay.addToMap();
 					drivingRouteOverlay.zoomToSpan();
 					mBottomLayout.setVisibility(View.VISIBLE);
+					mNavigateBtn.setVisibility(View.VISIBLE);
 					int dis = (int) drivePath.getDistance();
 					int dur = (int) drivePath.getDuration();
 					String des = AMapUtil.getFriendlyTime(dur)+"("+AMapUtil.getFriendlyLength(dis)+")";
@@ -206,6 +212,21 @@ public class DriveRouteActivity extends Activity implements OnMapClickListener,
 							intent.putExtra("drive_result",
 									mDriveRouteResult);
 							startActivity(intent);
+						}
+					});
+					mNavigateBtn.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent naviIntent = new Intent(DriveRouteActivity.this, SingleRouteCalculateActivity.class);
+							if (mStartPointLat > 0.0 && mStartPointLon > 0.0 && mEndPointLat > 0.0 && mEndPointLon > 0.0) {
+								naviIntent.putExtra("startPointLat", mStartPointLat);
+								naviIntent.putExtra("startPointLon", mStartPointLon);
+								naviIntent.putExtra("endPointLat", mEndPointLat);
+								naviIntent.putExtra("endPointLon", mEndPointLon);
+								startActivity(naviIntent);
+							} else {
+								Toast.makeText(DriveRouteActivity.this, "error navigation", Toast.LENGTH_LONG).show();
+							}
 						}
 					});
 

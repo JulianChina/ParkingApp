@@ -1,7 +1,6 @@
 package com.run.sg.amap3d.basic;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,12 +9,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -36,25 +31,10 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeAddress;
-import com.amap.api.services.geocoder.GeocodeResult;
-import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeResult;
-import com.amap.api.services.route.BusRouteResult;
-import com.amap.api.services.route.DriveRouteResult;
-import com.amap.api.services.route.RideRouteResult;
-import com.amap.api.services.route.RouteSearch;
-import com.amap.api.services.route.WalkPath;
-import com.amap.api.services.route.WalkRouteResult;
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.route.DriveRouteActivity;
-import com.run.sg.amap3d.route.WalkRouteDetailActivity;
-import com.run.sg.amap3d.util.AMapUtil;
 import com.run.sg.amap3d.util.SensorEventHelper;
-import com.run.sg.amap3d.util.ToastUtil;
-import com.run.sg.navigation.WalkRouteCalculateActivity;
 import com.run.sg.neighbor.SGNeighborActivity;
 import com.run.sg.parking.SGParkingActivity;
 import com.run.sg.pickup.SGPickUpActivity;
@@ -62,18 +42,11 @@ import com.run.sg.search.SGMainSearchActivity;
 import com.run.sg.util.CurrentPosition;
 import com.run.sg.view.SGCustomDialog;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import overlay.WalkRouteOverlay;
-
 /**
  * UI settings一些选项设置响应事件
  */
 public class UiSettingsActivity extends Activity implements
-        LocationSource, AMapLocationListener,
-        RouteSearch.OnRouteSearchListener,
-        GeocodeSearch.OnGeocodeSearchListener {
+        LocationSource, AMapLocationListener{
 
     private Context mContext;
     private AMap aMap;
@@ -89,8 +62,6 @@ public class UiSettingsActivity extends Activity implements
     public static final String LOCATION_MARKER_FLAG = "mylocation";
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
-    private LatLonPoint mStartPoint;
-
     public String getCurrentCityName() {
         return mCurrentCityName;
     }
@@ -100,25 +71,17 @@ public class UiSettingsActivity extends Activity implements
     }
 
     private String mCurrentCityName = "深圳";
+
     private double mEndPointLat = 0.0;
     private double mEndPointLon = 0.0;
+    private LatLonPoint mStartPoint;
     private LatLonPoint mEndPoint;
-    private RouteSearch mRouteSearch;
-    private final int ROUTE_TYPE_WALK = 3;
-    private ProgressDialog progressDialog = null;// 搜索时进度条
-    private WalkRouteResult mWalkRouteResult;
-    private TextView mRouteTimeDes, mRouteDetailDes;
-    private Button mNavigateBtn;
-    private List<LatLonPoint> mDonatePointLatLan = new ArrayList<LatLonPoint>();
-
-    private boolean mQueryFlag = true;
 
     private LinearLayout mBottomBarLayout;
     private LinearLayout mNeighborLayout;
     private LinearLayout mParkingLayout;
     private LinearLayout mPickUpLayout;
     private LinearLayout mSearchLayout;
-    private RelativeLayout mBottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -289,7 +252,6 @@ public class UiSettingsActivity extends Activity implements
                     intent.putExtra("driveRouteEndLat", mEndPointLat);
                     intent.putExtra("driveRouteEndLon", mEndPointLon);
                     startActivity(intent);
-//                    routePlan(mStartPoint, mEndPoint);
                 } catch (Exception e) {
                     Toast.makeText(mContext, "doRoutePlan error", Toast.LENGTH_SHORT).show();
                 }
@@ -331,9 +293,6 @@ public class UiSettingsActivity extends Activity implements
         }
         if (mBottomBarLayout != null) {
             mBottomBarLayout.setVisibility(View.VISIBLE);
-        }
-        if (mBottomLayout != null) {
-            mBottomLayout.setVisibility(View.GONE);
         }
     }
 
@@ -453,177 +412,4 @@ public class UiSettingsActivity extends Activity implements
         }
         mLocationClient = null;
     }
-
-
-
-    private void routePlan(LatLonPoint startPoint, LatLonPoint endPoint) {
-        initRoutePlan();
-        setFromAndToMarker(startPoint, endPoint);
-        searchRouteResult(ROUTE_TYPE_WALK, RouteSearch.WalkDefault, startPoint, endPoint);
-    }
-
-    private void initRoutePlan() {
-        mRouteSearch = new RouteSearch(this);
-        mRouteSearch.setRouteSearchListener(this);
-        mBottomLayout = (RelativeLayout) findViewById(com.run.sg.amap3d.R.id.bottom_layout);
-        mRouteTimeDes = (TextView) findViewById(com.run.sg.amap3d.R.id.firstline);
-        mRouteDetailDes = (TextView) findViewById(com.run.sg.amap3d.R.id.secondline);
-        mNavigateBtn = (Button) findViewById(R.id.navigate_btn);
-    }
-
-    private void setFromAndToMarker(LatLonPoint startPoint, LatLonPoint searchPoint) {
-        aMap.addMarker(new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(startPoint))
-                .icon(BitmapDescriptorFactory.fromResource(com.run.sg.amap3d.R.drawable.start)));
-        aMap.addMarker(new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(searchPoint))
-                .icon(BitmapDescriptorFactory.fromResource(com.run.sg.amap3d.R.drawable.end)));
-    }
-
-    /**
-     * 开始搜索路径规划方案
-     */
-    public void searchRouteResult(int routeType, int mode, LatLonPoint startPoint, LatLonPoint endPoint) {
-        if (startPoint == null) {
-            ToastUtil.show(mContext, "定位中，稍后再试...");
-            return;
-        }
-        if (endPoint == null) {
-            ToastUtil.show(mContext, "终点未设置");
-        }
-        showProgressDialog();
-        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(startPoint, endPoint);
-        if (routeType == ROUTE_TYPE_WALK) {// 步行路径规划
-            RouteSearch.WalkRouteQuery query = new RouteSearch.WalkRouteQuery(fromAndTo, mode);
-            mRouteSearch.calculateWalkRouteAsyn(query);// 异步路径规划步行模式查询
-        }
-    }
-
-    /**
-     * 显示进度框
-     */
-    private void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-        }
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(true);
-        progressDialog.setMessage("正在搜索");
-        progressDialog.show();
-    }
-
-    /**
-     * 隐藏进度框
-     */
-    private void dismissProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onBusRouteSearched(BusRouteResult result, int errorCode) {
-
-    }
-
-    @Override
-    public void onDriveRouteSearched(DriveRouteResult result, int errorCode) {
-
-    }
-
-    @Override
-    public void onRideRouteSearched(RideRouteResult arg0, int arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onWalkRouteSearched(WalkRouteResult result, int errorCode) {
-        dismissProgressDialog();
-        aMap.clear();// 清理地图上的所有覆盖物
-        if (errorCode == AMapException.CODE_AMAP_SUCCESS) {
-            if (result != null && result.getPaths() != null) {
-                if (result.getPaths().size() > 0) {
-                    mWalkRouteResult = result;
-                    final WalkPath walkPath = mWalkRouteResult.getPaths().get(0);
-                    WalkRouteOverlay walkRouteOverlay = new WalkRouteOverlay(
-                            this, aMap, walkPath,
-                            mWalkRouteResult.getStartPos(),
-                            mWalkRouteResult.getTargetPos());
-                    walkRouteOverlay.removeFromMap();
-                    walkRouteOverlay.addToMap();
-                    walkRouteOverlay.zoomToSpan();
-
-                    int dis = (int) walkPath.getDistance();
-                    int dur = (int) walkPath.getDuration();
-                    String des = AMapUtil.getFriendlyTime(dur) + "(" + AMapUtil.getFriendlyLength(dis) + ")";
-                    mRouteTimeDes.setText(des);
-                    mRouteDetailDes.setVisibility(View.GONE);
-                    mBottomBarLayout.setVisibility(View.GONE);
-                    mBottomLayout.setVisibility(View.VISIBLE);
-                    mBottomLayout.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext, WalkRouteDetailActivity.class);
-                            intent.putExtra("walk_path", walkPath);
-                            intent.putExtra("walk_result", mWalkRouteResult);
-                            startActivity(intent);
-                        }
-                    });
-                    mNavigateBtn.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent naviIntent = new Intent(UiSettingsActivity.this, WalkRouteCalculateActivity.class);
-                            if (CurrentPosition.mCurrentPointLat > 0.0 && CurrentPosition.mCurrentPointLon > 0.0 && mEndPointLat > 0.0 && mEndPointLon > 0.0) {
-                                naviIntent.putExtra("startPointLat", CurrentPosition.mCurrentPointLat);
-                                naviIntent.putExtra("startPointLon", CurrentPosition.mCurrentPointLon);
-                                naviIntent.putExtra("endPointLat", mEndPointLat);
-                                naviIntent.putExtra("endPointLon", mEndPointLon);
-                                startActivity(naviIntent);
-                            } else {
-                                Toast.makeText(UiSettingsActivity.this, "error navigation", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                } else if (result != null && result.getPaths() == null) {
-                    ToastUtil.show(mContext, com.run.sg.amap3d.R.string.no_result);
-                }
-            } else {
-                ToastUtil.show(mContext, com.run.sg.amap3d.R.string.no_result);
-            }
-        } else {
-            ToastUtil.showerror(this.getApplicationContext(), errorCode);
-        }
-    }
-
-
-    /**
-     * 地理编码查询回调
-     */
-    @Override
-    public void onGeocodeSearched(GeocodeResult result, int rCode) {
-        if (rCode == AMapException.CODE_AMAP_SUCCESS) {
-            if (result != null && result.getGeocodeAddressList() != null
-                    && result.getGeocodeAddressList().size() > 0) {
-                GeocodeAddress address = result.getGeocodeAddressList().get(0);
-                mDonatePointLatLan.add(address.getLatLonPoint());
-                mQueryFlag = true;
-            } else {
-                ToastUtil.show(this, R.string.no_result);
-            }
-        } else {
-            ToastUtil.showerror(this, rCode);
-        }
-    }
-
-    /**
-     * 逆地理编码回调
-     */
-    @Override
-    public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
-
-    }
-
-
 }

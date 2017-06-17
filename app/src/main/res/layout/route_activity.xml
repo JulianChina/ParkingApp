@@ -81,11 +81,23 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/navigate_btn"
+        android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/navigation_text"
+        android:textSize="14sp"
+        android:textColor="@color/color_1B85FF"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/navigate_btn"
         android:padding="5dp"
         android:background="@drawable/bg_bottom_bar"
         android:gravity="center_vertical"
@@ -136,6 +148,7 @@
                 android:background="@drawable/arrow_right_blue"
                 android:gravity="center_vertical" />
         </LinearLayout>
+
     </RelativeLayout>
 
     <com.amap.api.maps.MapView
