@@ -23,10 +23,10 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
-import com.google.android.gms.appindexing.Action;
+/*import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient;*/
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.basic.UiSettingsActivity;
 import com.run.sg.amap3d.district.DistrictActivity;
@@ -53,7 +53,7 @@ public class SGMainSearchActivity extends Activity
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private GoogleApiClient client;
+    //private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +112,14 @@ public class SGMainSearchActivity extends Activity
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (null == data) {
+            return;
+        }
         if (0 == requestCode && 0 == requestCode) {
             mCurrentCityName = data.getStringExtra("select_city_name");
             if (!TextUtils.isEmpty(mCurrentCityName)) {

@@ -5,13 +5,45 @@
 
     <ImageView
         android:id="@+id/parking_back_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/back"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="@string/parking_confirm_text"
+        android:textColor="@color/color_1B85FF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/parking_confirm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="@string/ok"
+        android:textSize="14sp"
+        android:textColor="@color/blue"/>
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/parking_back_img"
+        android:background="@color/sg_divider_color"/>
 
     <EditText
         android:id="@+id/parking_id"
@@ -19,19 +51,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/divider"
         android:hint="@string/parking_hint_text"
         android:textColor="@color/sg_bottom_bar_text_color"
-        android:textColorHint="@color/sg_bottom_bar_text_color" />
+        android:textColorHint="@color/gary" />
 
-    <Button
-        android:id="@+id/parking_confirm_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:text="@string/parking_confirm_text"/>
 
 </RelativeLayout>

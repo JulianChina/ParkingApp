@@ -5,25 +5,29 @@
 
     <ImageView
         android:id="@+id/pick_up_back_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
         android:src="@drawable/back"/>
 
     <TextView
         android:id="@+id/pick_up_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/pick_up_back_img"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
         android:text="@string/pick_up_title_text"
-        android:textSize="22sp"
-        android:textColor="@color/sg_bottom_bar_text_color"/>
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_1B85FF"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/pick_up_back_img"
+        android:background="@color/sg_divider_color"/>
 
     <Button
         android:id="@+id/pick_up_pay_btn"
@@ -33,5 +37,6 @@
         android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
-        android:text="@string/pick_up_pay_text"/>
+        android:text="@string/pick_up_pay_text"
+        android:background="@color/f850_default_blue"/>
 </RelativeLayout>

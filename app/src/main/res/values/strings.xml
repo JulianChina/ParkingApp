@@ -266,7 +266,7 @@
 
     <!--停车相关-->
     <string name="parking_title_text">车位编号</string>
-    <string name="parking_confirm_text">确认停车</string>
+    <string name="parking_confirm_text">我要停车</string>
     <string name="parking_hint_text">请输入当前车位编号</string>
 
     <!--取车相关-->
@@ -282,4 +282,6 @@
     <string name="search_hint_text">请输入地址</string>
     <string name="navigation_text">导航</string>
 
+    <!--常用-->
+    <string name="ok">确认</string>
 </resources>

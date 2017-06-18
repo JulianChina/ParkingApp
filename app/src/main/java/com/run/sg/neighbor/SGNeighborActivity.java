@@ -2,12 +2,20 @@ package com.run.sg.neighbor;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
@@ -61,6 +69,16 @@ public class SGNeighborActivity extends FragmentActivity
 
     private void initActionBar(){
         mActionBar = getActionBar();
+        String str = getResources().getString(R.string.neighbor_title_text);
+        SpannableString spannableString = new SpannableString(str);
+        StyleSpan styleSpan_B  = new StyleSpan(Typeface.BOLD);
+        AbsoluteSizeSpan sizeSpan01 = new AbsoluteSizeSpan(18,true);
+        spannableString.setSpan(
+                new ForegroundColorSpan(getResources().getColor(R.color.f850_default_blue)),
+                0,spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(styleSpan_B,0,spannableString.length(),Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(sizeSpan01,0,spannableString.length(),Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mActionBar.setTitle(spannableString);
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mActionBar.setDisplayShowTitleEnabled(true);//设置Ttile 可见
         mActionBar.setDisplayHomeAsUpEnabled(true);//设置返回键可见并能响应

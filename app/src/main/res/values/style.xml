@@ -21,4 +21,13 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="SG_NeighborActivityTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarTabTextStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/sg_tab_text_selector</item>
+    </style>
+
 </resources>
