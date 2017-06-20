@@ -260,7 +260,7 @@
     <!--SG ADD START-->
 
     <!--主界面UI-->
-    <string name="neighbor_text">附近</string>
+    <string name="neighbor_text">停车场</string>
     <string name="parking_text">停车</string>
     <string name="pick_up_text">取车</string>
 
@@ -277,6 +277,13 @@
     <string name="neighbor_title_text">附近的停车场信息</string>
     <string name="sort_by_price_text">价格</string>
     <string name="sort_by_distance_text">距离</string>
+    
+    <!--停车详情相关-->
+    <string name="parking_detail_vacancy">空闲车位</string>
+    <string name="parking_detail_total">全部车位</string>
+    <string name="parking_detail_charge_rule">收费规则</string>
+    <string name="parking_detail_navigation_time">所需时间</string>
+    <string name="parking_detail_navigation">导航至停车场</string>
 
     <!--搜索相关-->
     <string name="search_hint_text">请输入地址</string>

@@ -7,10 +7,6 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="SG_About_Us_Activity_Theme">
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
     <style name="MyDialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
@@ -28,6 +24,11 @@
     <style name="MyActionBar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/sg_tab_text_selector</item>
+    </style>
+
+    <style name="SGParkingDetailTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
 </resources>

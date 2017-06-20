@@ -14,7 +14,9 @@ import android.widget.ListView;
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.route.DriveRouteActivity;
 import com.run.sg.model.SGParkingLotItemData;
+import com.run.sg.parkingdetail.SGParkingDetailActivity;
 import com.run.sg.util.CurrentPosition;
+import com.run.sg.util.SGParkingContants;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,11 +51,13 @@ public class SGSortDistanceFragment extends Fragment {
         mSortDistanceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mFragmentActivity, DriveRouteActivity.class);
-                intent.putExtra("driveRouteCurrentLat", CurrentPosition.mCurrentPointLat);
-                intent.putExtra("driveRouteCurrentLon", CurrentPosition.mCurrentPointLon);
-                intent.putExtra("driveRouteEndLat", mDataByDistance.get(position).getLatitude());
-                intent.putExtra("driveRouteEndLon", mDataByDistance.get(position).getLongitude());
+                Intent intent = new Intent(mFragmentActivity, SGParkingDetailActivity.class);
+                intent.putExtra(SGParkingContants.EXTRA_NAME,mDataByDistance.get(position).getName());
+                intent.putExtra(SGParkingContants.EXTRA_ADDRESS,mDataByDistance.get(position).getAddress());
+                intent.putExtra(SGParkingContants.EXTRA_DISTANCE,mDataByDistance.get(position).getDistance());
+                intent.putExtra(SGParkingContants.EXTRA_TOTAL,mDataByDistance.get(position).getVacancy());
+                intent.putExtra(SGParkingContants.EXTRA_LEFT,mDataByDistance.get(position).getLeft());
+                intent.putExtra(SGParkingContants.EXTRA_PRICE,mDataByDistance.get(position).getPrice());
                 startActivity(intent);
             }
         });

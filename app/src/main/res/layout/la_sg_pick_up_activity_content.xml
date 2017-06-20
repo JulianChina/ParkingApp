@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="5dp"
         android:layout_alignParentTop="true"
-        android:src="@drawable/back"/>
+        android:src="@drawable/offline_back"/>
 
     <TextView
         android:id="@+id/pick_up_title"

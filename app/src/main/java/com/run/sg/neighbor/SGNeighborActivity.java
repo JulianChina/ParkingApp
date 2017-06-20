@@ -83,7 +83,7 @@ public class SGNeighborActivity extends FragmentActivity
         mActionBar.setDisplayShowTitleEnabled(true);//设置Ttile 可见
         mActionBar.setDisplayHomeAsUpEnabled(true);//设置返回键可见并能响应
         mActionBar.setDisplayShowHomeEnabled(false);//设置Home图标不显示
-        mActionBar.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));//设置返回键图标
+        mActionBar.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.offline_back));//设置返回键图标
 
         for (SGSortTab tab : mSortTabList){
             ActionBar.Tab t = mActionBar.newTab();
