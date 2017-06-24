@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/parking_detail_imgView"
+    <com.amap.api.maps.MapView
+        android:id="@+id/parking_detail_mapView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/black"/>
+        android:layout_height="200dp">
+    </com.amap.api.maps.MapView>
 
     <ImageView
         android:id="@+id/parking_detail_back"
@@ -23,7 +23,7 @@
         android:id="@+id/parking_part2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/parking_detail_imgView"
+        android:layout_below="@id/parking_detail_mapView"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="10dp">
@@ -211,12 +211,12 @@
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/route_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:text="20min"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 

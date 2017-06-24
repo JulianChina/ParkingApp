@@ -35,6 +35,7 @@ import com.amap.api.services.core.LatLonPoint;
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.route.DriveRouteActivity;
 import com.run.sg.amap3d.util.SensorEventHelper;
+import com.run.sg.amap3d.util.ToastUtil;
 import com.run.sg.neighbor.SGNeighborActivity;
 import com.run.sg.parking.SGParkingActivity;
 import com.run.sg.pickup.SGPickUpActivity;
@@ -46,7 +47,7 @@ import com.run.sg.view.SGCustomDialog;
  * UI settings一些选项设置响应事件
  */
 public class UiSettingsActivity extends Activity implements
-        LocationSource, AMapLocationListener{
+        LocationSource, AMapLocationListener, AMap.OnInfoWindowClickListener {
 
     private Context mContext;
     private AMap aMap;
@@ -57,6 +58,7 @@ public class UiSettingsActivity extends Activity implements
     private AMapLocationClientOption mLocationOption;
     private SensorEventHelper mSensorHelper;
     private Marker mLocMarker;
+    private Marker mLocalGeoMarker;
     private Circle mCircle;
     private boolean mFirstFix = false;
     public static final String LOCATION_MARKER_FLAG = "mylocation";
@@ -142,16 +144,18 @@ public class UiSettingsActivity extends Activity implements
             mEndPointLat = data.getDoubleExtra("searchPointLat", 0.0);
             mEndPointLon = data.getDoubleExtra("searchPointLon", 0.0);
             if (mEndPointLat > 0.0 && mEndPointLon > 0.0) {
-                Marker localGeoMarker = aMap.addMarker(new MarkerOptions().anchor(1.0f, 1.0f)
+                LatLng localLatLng = new LatLng(mEndPointLat, mEndPointLon);
+                mLocalGeoMarker = aMap.addMarker(new MarkerOptions().anchor(1.0f, 1.0f)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                        .position(new LatLng(mEndPointLat, mEndPointLon))
-                        .title("目的地"));
-                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mEndPointLat, mEndPointLon)));
+                        .position(localLatLng)
+                        .title("点击这里去目的地"));
+                mLocalGeoMarker.showInfoWindow();
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(localLatLng));
                 if (CurrentPosition.mCurrentPointLat > 0.0 && CurrentPosition.mCurrentPointLon > 0.0) {
                     // 设置所有maker显示在当前可视区域地图中
                     LatLngBounds bounds = new LatLngBounds.Builder()
                             .include(new LatLng(CurrentPosition.mCurrentPointLat, CurrentPosition.mCurrentPointLon))
-                            .include(new LatLng(mEndPointLat, mEndPointLon)).build();
+                            .include(localLatLng).build();
                     aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 12));
                     aMap.moveCamera(CameraUpdateFactory.zoomOut());
                 }
@@ -212,6 +216,7 @@ public class UiSettingsActivity extends Activity implements
     }
 
     private void registerListener() {
+        aMap.setOnInfoWindowClickListener(this);// 设置点击infoWindow事件监听器
         aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -222,13 +227,34 @@ public class UiSettingsActivity extends Activity implements
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (marker != null) {
-                    showDialog(marker);
+                    routePlan(marker);
                 } else {
                     Toast.makeText(UiSettingsActivity.this, "error marker click", Toast.LENGTH_LONG).show();
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        routePlan(marker);
+    }
+
+    private void routePlan(Marker marker) {
+        try {
+            LatLng endPoint = marker.getPosition();
+            mEndPointLat = endPoint.latitude;
+            mEndPointLon = endPoint.longitude;
+            Intent intent = new Intent(UiSettingsActivity.this, DriveRouteActivity.class);
+            intent.putExtra("driveRouteCurrentLat", CurrentPosition.mCurrentPointLat);
+            intent.putExtra("driveRouteCurrentLon", CurrentPosition.mCurrentPointLon);
+            intent.putExtra("driveRouteEndLat", mEndPointLat);
+            intent.putExtra("driveRouteEndLon", mEndPointLon);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(mContext, "doRoutePlan error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

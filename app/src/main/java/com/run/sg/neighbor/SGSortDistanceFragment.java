@@ -58,6 +58,12 @@ public class SGSortDistanceFragment extends Fragment {
                 intent.putExtra(SGParkingContants.EXTRA_TOTAL,mDataByDistance.get(position).getVacancy());
                 intent.putExtra(SGParkingContants.EXTRA_LEFT,mDataByDistance.get(position).getLeft());
                 intent.putExtra(SGParkingContants.EXTRA_PRICE,mDataByDistance.get(position).getPrice());
+
+                intent.putExtra("driveRouteCurrentLat", CurrentPosition.mCurrentPointLat);
+                intent.putExtra("driveRouteCurrentLon", CurrentPosition.mCurrentPointLon);
+                intent.putExtra("driveRouteEndLat", mDataByDistance.get(position).getLatitude());
+                intent.putExtra("driveRouteEndLon", mDataByDistance.get(position).getLongitude());
+
                 startActivity(intent);
             }
         });
