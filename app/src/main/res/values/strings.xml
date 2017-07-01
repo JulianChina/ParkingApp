@@ -22,7 +22,7 @@
     <string name="custom_info_contents">Custom info contents</string>
     <string name="custom_info_window">Custom info window</string>
     <string name="default_info_window">Default info window</string>
-    <string name="demo_title">i停车</string>
+    <string name="demo_title">棒棒停</string>
     <string name="down_arrow">\u2193</string>
     <string name="drag_melbourne">Drag Melbourne</string>
     <string name="events_demo">Events功能</string>
@@ -288,6 +288,26 @@
     <!--搜索相关-->
     <string name="search_hint_text">请输入地址</string>
     <string name="navigation_text">导航</string>
+
+    <!--设置相关-->
+    <string name="menu_logon_text">请点击登录</string>
+    <string name="menu_wallet_text">我的钱包</string>
+    <string name="menu_coupon_text">优惠券</string>
+    <string name="menu_licence_plate_text">我的车牌</string>
+    <string name="menu_order_text">我的订单</string>
+    <string name="menu_recommend_text">推荐好友</string>
+    <string name="menu_franchise_shop_text">联系加盟</string>
+    <string name="menu_service_text">生活服务</string>
+    <string name="menu_more_text">更多</string>
+    <string name="menu_setting_text">设置</string>
+    <string name="recommend_title_text">分享好友</string>
+
+    <!--更多相关-->
+    <string name="about_preference_entry">关于棒棒停</string>
+    <string name="feedback_preference_entry">用户反馈</string>
+    <string name="help_preference_entry">使用帮助</string>
+    <string name="upgrade_preference_entry">检查更新</string>
+    <string name="customer_preference_entry">客服电话</string>
 
     <!--常用-->
     <string name="ok">确认</string>

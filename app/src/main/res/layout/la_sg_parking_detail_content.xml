@@ -46,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/poi_marker_pressed"/>
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_location"/>
 
                 <TextView
                     android:id="@+id/parking_detail_address"

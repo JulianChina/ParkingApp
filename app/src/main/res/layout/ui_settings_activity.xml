@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/bottom_bar_layout"
@@ -21,7 +21,9 @@
             android:gravity="center"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="bottomBarClickListener"
+            android:background="@drawable/selector_ripple_item">
 
             <TextView
                 android:layout_width="match_parent"
@@ -46,7 +48,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="bottomBarClickListener"
+            android:background="@drawable/selector_ripple_item">
 
             <TextView
                 android:layout_width="match_parent"
@@ -70,12 +74,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:onClick="">
+            android:onClick="bottomBarClickListener"
+            android:background="@drawable/selector_ripple_item">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="16sp"
@@ -89,55 +94,81 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/search_layout"
+        android:id="@+id/search_actionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_centerHorizontal="true"
-        android:padding="10dp"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@color/f850_default_blue">
+        android:padding="5dp"
+        android:background="@color/white">
 
         <ImageView
-            android:id="@+id/fake_search_icon"
-            android:layout_width="wrap_content"
+            android:id="@+id/setting_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_person"
+            android:onClick="bottomBarClickListener"/>
+
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginRight="5dp"
-            android:src="@drawable/search_icon_white"/>
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/search_bar_blue"
+            android:onClick="bottomBarClickListener">
+
+            <ImageView
+                android:id="@+id/fake_search_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_menu_search_material"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/current_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="搜索"
-            android:textSize="16sp"
-            android:textColor="@color/sg_bottom_bar_bac"/>
+            android:drawableRight="@drawable/offlinearrow_down"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="深圳"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/sg_bottom_bar_text_color"/>
+
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_bar_layout"
-        android:layout_below="@id/search_layout">
+        android:layout_below="@id/search_actionbar">
+
+        <ImageView
+            android:id="@+id/empty_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/white"
+            android:visibility="gone"/>
 
         <com.amap.api.maps.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-
-        <ImageButton
-            android:id="@+id/upload"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/ic_sg_mainui_upload"/>
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:id="@+id/bottom_layout"
@@ -205,5 +236,32 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/current_position_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="50dp"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textIsSelectable="true"
+        android:textColor="@color/f850_default_blue"
+        android:textSize="14sp"
+        android:background="@color/white"/>
+
+    <FrameLayout
+        android:id="@+id/search_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_actionbar"
+        android:background="@color/white"
+        android:visibility="gone">
+
+    </FrameLayout>
 
 </RelativeLayout>

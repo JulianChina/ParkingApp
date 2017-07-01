@@ -1,5 +1,9 @@
 package com.run.sg.amap3d.basic;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +14,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -32,16 +41,21 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.core.LatLonPoint;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.run.sg.amap3d.R;
 import com.run.sg.amap3d.route.DriveRouteActivity;
 import com.run.sg.amap3d.util.SensorEventHelper;
-import com.run.sg.amap3d.util.ToastUtil;
 import com.run.sg.neighbor.SGNeighborActivity;
 import com.run.sg.parking.SGParkingActivity;
 import com.run.sg.pickup.SGPickUpActivity;
 import com.run.sg.search.SGMainSearchActivity;
+import com.run.sg.settings.SGFranchiseShopActivity;
+import com.run.sg.settings.SGMoreSettingsActivity;
+import com.run.sg.settings.SGRecommendActivity;
+import com.run.sg.settings.SGServiceActivity;
 import com.run.sg.util.CurrentPosition;
 import com.run.sg.view.SGCustomDialog;
+
 
 /**
  * UI settings一些选项设置响应事件
@@ -79,10 +93,10 @@ public class UiSettingsActivity extends Activity implements
     private double mEndPointLon = 0.0;
 
     private LinearLayout mBottomBarLayout;
-    private LinearLayout mNeighborLayout;
-    private LinearLayout mParkingLayout;
-    private LinearLayout mPickUpLayout;
-    private LinearLayout mSearchLayout;
+
+    private SlidingMenu mSlidingMenu;
+    private ImageView mEmptyMap;
+    private FrameLayout mSearchContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,48 +104,17 @@ public class UiSettingsActivity extends Activity implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.ui_settings_activity);
         mContext = this.getApplicationContext();
+        initSlidingMenu();
 
         mBottomBarLayout = (LinearLayout) findViewById(R.id.bottom_bar_layout);
-        mNeighborLayout = (LinearLayout) findViewById(R.id.neighbor_layout);
-        mNeighborLayout.setOnClickListener(mClickListener);
-        mParkingLayout = (LinearLayout) findViewById(R.id.parking_layout);
-        mParkingLayout.setOnClickListener(mClickListener);
-        mPickUpLayout = (LinearLayout) findViewById(R.id.pick_up_layout);
-        mPickUpLayout.setOnClickListener(mClickListener);
-        mSearchLayout = (LinearLayout) findViewById(R.id.search_layout);
-        mSearchLayout.setOnClickListener(mClickListener);
+        mEmptyMap = (ImageView)findViewById(R.id.empty_map);
+        mSearchContent = (FrameLayout)findViewById(R.id.search_view_container);
 
         mapView = (MapView) findViewById(com.run.sg.amap3d.R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         registerListener();
     }
-
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            switch (id){
-                case R.id.neighbor_layout:
-                    startActivity(new Intent(UiSettingsActivity.this, SGNeighborActivity.class));
-                    break;
-                case R.id.parking_layout:
-                    startActivity(new Intent(UiSettingsActivity.this, SGParkingActivity.class));
-                    break;
-                case R.id.pick_up_layout:
-                    startActivity(new Intent(UiSettingsActivity.this, SGPickUpActivity.class));
-                    break;
-                case R.id.search_layout:
-                    Intent intent = new Intent(UiSettingsActivity.this, SGMainSearchActivity.class);
-                    intent.putExtra("city_name", getCurrentCityName());
-                    UiSettingsActivity.this.startActivityForResult(intent, 0);
-                    break;
-                default:
-                    break;
-            }
-
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -371,6 +354,7 @@ public class UiSettingsActivity extends Activity implements
                 } else {
                     mLocMarker.setPosition(location);
                 }
+                ((TextView)findViewById(R.id.current_position_textview)).setText("当前位置：" + amapLocation.getAddress());
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);
@@ -437,5 +421,163 @@ public class UiSettingsActivity extends Activity implements
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
+    }
+
+    private void initSlidingMenu(){
+        mSlidingMenu = new SlidingMenu(this);
+        mSlidingMenu.setMode(SlidingMenu.LEFT); //设置滑动菜单在左边还是右边
+        // 设置触摸屏幕的模式
+        //TOUCHMODE_FULLSCREEN 全屏模式，在content页面中，滑动，可以打开sliding menu
+        //TOUCHMODE_MARGIN 边缘模式，在content页面中，在屏幕边缘滑动才可以打开slding menu
+        //TOUCHMODE_NONE 不能通过手势打开啦
+        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        mSlidingMenu.setShadowWidthRes(R.dimen.sg_slidingmenu_shadow_width);
+        // 设置滑动菜单视图的宽度
+        mSlidingMenu.setBehindOffsetRes(R.dimen.sg_slidingmenu_offset);
+        // 设置渐入渐出效果的值
+        mSlidingMenu.setFadeDegree(0.35f);
+        mSlidingMenu.setFadeEnabled(true);
+        mSlidingMenu.setBehindScrollScale(0);
+        /**
+         * SLIDING_WINDOW will include the Title/ActionBar in the content
+         * section of the SlidingMenu, while SLIDING_CONTENT does not.
+         */
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        mSlidingMenu.setMenu(R.layout.la_sg_slidingmenu_content);
+        mSlidingMenu.setOnOpenListener(new SlidingMenu.OnOpenListener() {
+            @Override
+            public void onOpen() {
+                Log.d("yq","onOpen");
+                mapView.setVisibility(View.GONE);
+                if (mEmptyMap != null && mEmptyMap.getVisibility() == View.GONE){
+                    mEmptyMap.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mSlidingMenu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
+            @Override
+            public void onOpened() {
+                Log.d("yq","onOpened");
+                mapView.setVisibility(View.VISIBLE);
+                if (mEmptyMap != null && mEmptyMap.getVisibility() == View.VISIBLE){
+                    mEmptyMap.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mSlidingMenu !=null && mSlidingMenu.isMenuShowing()){
+            mSlidingMenu.toggle();
+            return;
+        }
+        if (mSearchContent != null && mSearchContent.getVisibility() == View.VISIBLE){
+            mSearchContent.setVisibility(View.GONE);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private void showSearchContentWithAnim(){
+        ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(mSearchContent,"alpha",0.3f,1.0f);
+        //TranslateAnimation translateAnimation = new TranslateAnimation();
+        ObjectAnimator transYAnim = ObjectAnimator.ofFloat(mSearchContent,"y",
+                -1920,0);
+        int startY = mSearchContent.getBottom() - mSearchContent.getTop();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(alphaAnim,transYAnim);
+        animatorSet.setDuration(1000);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mSearchContent.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mSearchContent.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
+    }
+
+    public void menuClickListener(View view){
+        int id = view.getId();
+        switch (id){
+            case R.id.menu_logon_layout:
+                Log.d("yq","logon click");
+                break;
+            case R.id.menu_wallet_layout:
+                Log.d("yq","menu_wallet_layout click");
+                break;
+            case R.id.menu_licence_plate_layout:
+                Log.d("yq","menu_licence_plate_layout click");
+                break;
+            case R.id.menu_order_layout:
+                Log.d("yq","menu_order_layout click");
+                break;
+            case R.id.menu_recommend_layout:
+                Log.d("yq","menu_recommend_layout click");
+                startActivity(new Intent(this, SGRecommendActivity.class));
+                break;
+            case R.id.menu_franchise_shop_layout:
+                Log.d("yq","menu_franchise_shop_layout click");
+                startActivity(new Intent(this, SGFranchiseShopActivity.class));
+                break;
+            case R.id.menu_service_layout:
+                Log.d("yq","menu_service_layout click");
+                startActivity(new Intent(this, SGServiceActivity.class));
+                break;
+            case R.id.menu_more_layout:
+                Log.d("yq","menu_more_layout click");
+                startActivity(new Intent(this, SGMoreSettingsActivity.class));
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void bottomBarClickListener(View v){
+        int id = v.getId();
+        switch (id){
+            case R.id.neighbor_layout:
+                startActivity(new Intent(this, SGNeighborActivity.class));
+                break;
+            case R.id.parking_layout:
+                startActivity(new Intent(this, SGParkingActivity.class));
+                break;
+            case R.id.pick_up_layout:
+                startActivity(new Intent(this, SGPickUpActivity.class));
+                break;
+            case R.id.search_layout:
+                Intent intent = new Intent(this, SGMainSearchActivity.class);
+                intent.putExtra("city_name", getCurrentCityName());
+                UiSettingsActivity.this.startActivityForResult(intent, 0);
+                    /*if (mSearchContent != null && mSearchContent.getVisibility() == View.GONE){
+                        showSearchContentWithAnim();
+                    }*/
+                break;
+            case R.id.setting_img:
+                if (mSlidingMenu != null){
+                    mSlidingMenu.toggle();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

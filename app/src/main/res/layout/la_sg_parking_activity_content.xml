@@ -25,19 +25,6 @@
         android:textSize="18sp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/parking_confirm_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:text="@string/ok"
-        android:textSize="14sp"
-        android:textColor="@color/blue"/>
-
     <ImageView
         android:id="@+id/divider"
         android:layout_width="match_parent"

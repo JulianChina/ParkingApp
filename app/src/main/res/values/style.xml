@@ -3,8 +3,8 @@
     <style name="SG_Search_Activity_Theme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityEnterAnimFromLeft</item>
     </style>
 
     <style name="MyDialogStyle" parent="@android:style/Theme.Dialog">
@@ -15,10 +15,14 @@
     <style name="SG_Parking_Activity_Theme">
         <item name="android:windowBackground">@color/sg_bottom_bar_bac</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityEnterAnimFromLeft</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="SG_NeighborActivityTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarTabTextStyle">@style/MyActionBar</item>
+        <item name="android:windowAnimationStyle">@style/ActivityEnterAnimFromLeft</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="MyActionBar" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
@@ -27,8 +31,15 @@
     </style>
 
     <style name="SGParkingDetailTheme">
-        <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityEnterAnimFromLeft</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    
+    <style name="ActivityEnterAnimFromLeft" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/pull_in_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_out_right</item>
     </style>
 
 </resources>
