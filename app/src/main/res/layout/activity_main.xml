@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F6FA"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/btn_normal"
+        style="@style/PayBtnStyle"
+        android:text="@string/normal_model" />
+
+    <Button
+        android:id="@+id/btn_front_activity"
+        style="@style/PayBtnStyle"
+        android:text="@string/front_model_activity" />
+
+    <Button
+        android:id="@+id/btn_custom_key"
+        style="@style/PayBtnStyle"
+        android:text="@string/custom_key" />
+
+    <Button
+        android:id="@+id/btn_server_sign"
+        style="@style/PayBtnStyle"
+        android:text="@string/server_sign_rsa" />
+
+    <Button
+        android:id="@+id/btn_repay"
+        style="@style/PayBtnStyle"
+        android:text="@string/loan_repay" />
+
+</LinearLayout>

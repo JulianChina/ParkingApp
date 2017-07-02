@@ -35,4 +35,10 @@
     <color name="sg_bottom_bar_text_color">#000000</color>
     <color name="sg_divider_color">#60000000</color>
 
+    <!--PAY ADD START-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
 </resources>

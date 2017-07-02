@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F6FA"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_custom_rsa"
+        style="@style/PayBtnStyle"
+        android:text="@string/custom_rsa" />
+
+    <Button
+        android:id="@+id/btn_custom_md5"
+        style="@style/PayBtnStyle"
+        android:text="@string/custom_md5" />
+
+</LinearLayout>

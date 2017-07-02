@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F6FA"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/btn_ali"
+        style="@style/PayBtnStyle"
+        android:text="@string/alipay" />
+
+    <Button
+        android:id="@+id/btn_wx"
+        style="@style/PayBtnStyle"
+        android:text="@string/wxpay" />
+
+    <Button
+        android:id="@+id/btn_bd"
+        style="@style/PayBtnStyle"
+        android:text="@string/bdpay" />
+
+    <Button
+        android:id="@+id/btn_up"
+        style="@style/PayBtnStyle"
+        android:text="@string/unionpay" />
+
+    <Button
+        android:id="@+id/btn_jd"
+        style="@style/PayBtnStyle"
+        android:text="@string/jdpay" />
+
+    <Button
+        android:id="@+id/btn_fq"
+        style="@style/PayBtnStyle"
+        android:text="@string/fqpay" />
+
+</LinearLayout>
