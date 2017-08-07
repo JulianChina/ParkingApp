@@ -13,6 +13,16 @@ android {
         multiDexEnabled true
     }
 
+//    buildTypes {
+//        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+//        }
+//        debug {
+//
+//        }
+//    }
+
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -36,6 +46,8 @@ dependencies {
     //    compile files('libs/Msc.jar')
     //    compile files('libs/Volley.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile project(':SlidingMenu')
     //compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    //compile 'com.google.android.gms:play-services:10.2.4'
 }
 

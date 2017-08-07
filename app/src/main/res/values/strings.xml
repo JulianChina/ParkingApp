@@ -300,45 +300,46 @@
     <string name="menu_service_text">生活服务</string>
     <string name="menu_more_text">更多</string>
     <string name="menu_setting_text">设置</string>
+    
+    <!--分享好友相关-->
     <string name="recommend_title_text">分享好友</string>
+    <string name="recommend_content_text1">有朋自远方来，不亦乐乎</string>
+    <string name="recommend_content_text2">------------------------------分享至-----------------------------</string>
+    <string name="recommend_wechat_text">微信好友</string>
+    <string name="recommend_wechat_friend_text">朋友圈</string>
+    <string name="recommend_qq_text">QQ好友</string>
+    <string name="recommend_qq_zone_text">QQ空间</string>
+    
+    <!--联系加盟相关-->
+    <string name="partner_name_text">联系人姓名</string>
+    <string name="partner_name_text2">您的姓名:</string>
+    <string name="partner_number_text">联系人手机号</string>
+    <string name="partner_number_text2">您的手机号:</string>
+    <string name="partner_parking_name_text">停车场名称</string>
+    <string name="partner_parking_addr_text">停车场位置:</string>
+    <string name="partner_contact_name_text">物管联系人姓名</string>
+    <string name="partner_contact_name_text2">物管员姓名:</string>
+    <string name="partner_contact_number_text">物管联系人号码</string>
+    <string name="partner_contact_number_text2">物管员号码:</string>
+    <string name="partner_remarks_text">备注</string>
+    <string name="partner_remarks_text2">备注:</string>
+    <string name="partner_commit_text">提交</string>
+    <string name="partner_hint_text">若您有适合参与帮帮停的停车场或者小区，请您留下物业的联系方式，我们将与您一起与物业洽谈，合作成功我们将会奖励你。</string>
 
     <!--更多相关-->
-    <string name="about_preference_entry">关于棒棒停</string>
+    <string name="about_preference_entry">关于帮帮停</string>
     <string name="feedback_preference_entry">用户反馈</string>
     <string name="help_preference_entry">使用帮助</string>
     <string name="upgrade_preference_entry">检查更新</string>
     <string name="customer_preference_entry">客服电话</string>
+    
+    <!--取车相关-->
+    <string name="pickup_current_position_text">您当前的车位位置为：</string>
+    <string name="pickup_time_period_text">停车时间段</string>
+    <string name="pickup_start_time_text">停车时间：12时12分</string>
+    <string name="pickup_end_time_text">取车时间：12时12分</string>
+    <string name="pickup_total_time_text">停车时长：12时12分</string>
 
     <!--常用-->
     <string name="ok">确认</string>
-
-    <!-- 付钱拉 Demo -->
-    <string name="app_name">付钱拉</string>
-    <string name="order">订单</string>
-    <string name="commodity">商品</string>
-    <string name="amount">总金额</string>
-    <string name="phone">手机号</string>
-    <string name="details">商品详情</string>
-    <string name="payment">支付</string>
-    <string name="notify_url">notifyUrl</string>
-    <string name="input_commodity">请输入商品名称</string>
-    <string name="input_amount">请输入总金额</string>
-    <string name="input_phone">请输入手机号</string>
-    <string name="input_details">请输入商品详情</string>
-    <string name="input_notify_url">请输入notifyUrl</string>
-    <string name="input_order">请输入付钱拉订单号</string>
-    <string name="normal_model">正常模式</string>
-    <string name="normal_repay">正常还款</string>
-    <string name="front_model_activity">前置模式Activity</string>
-    <string name="custom_rsa">自定义RSA</string>
-    <string name="custom_md5">自定义MD5</string>
-    <string name="custom_key">自定义私钥</string>
-    <string name="server_sign_rsa">服务器签名RSA</string>
-    <string name="loan_repay">分期还款</string>
-    <string name="alipay">支付宝</string>
-    <string name="wxpay">微信支付</string>
-    <string name="bdpay">百度钱包</string>
-    <string name="unionpay">银联支付</string>
-    <string name="jdpay">京东钱包</string>
-    <string name="fqpay">分期支付</string>
 </resources>

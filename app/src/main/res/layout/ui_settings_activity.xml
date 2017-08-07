@@ -15,23 +15,22 @@
         android:background="@drawable/bg_bottom_bar">
 
         <LinearLayout
-            android:id="@+id/neighbor_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:onClick="bottomBarClickListener"
-            android:background="@drawable/selector_ripple_item">
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/neighbor_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="16sp"
                 android:textColor="@color/blue"
-                android:clickable="false"
+                android:onClick="bottomBarClickListener"
+                android:drawableTop="@drawable/selsctor_neighbor_pic"
+                android:clickable="true"
                 android:text="@string/neighbor_text"
                 android:textStyle="bold"/>
 
@@ -43,22 +42,22 @@
             android:background="@color/sg_divider_color"/>
 
         <LinearLayout
-            android:id="@+id/parking_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:onClick="bottomBarClickListener"
             android:background="@drawable/selector_ripple_item">
 
             <TextView
+                android:id="@+id/parking_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:clickable="false"
                 android:textColor="@color/blue"
+                android:onClick="bottomBarClickListener"
+                android:drawableTop="@drawable/selector_parking_pic"
                 android:text="@string/parking_text"
                 android:textStyle="bold"/>
 
@@ -70,22 +69,22 @@
             android:background="@color/sg_divider_color"/>
 
         <LinearLayout
-            android:id="@+id/pick_up_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:onClick="bottomBarClickListener"
-            android:background="@drawable/selector_ripple_item">
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/pick_up_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="16sp"
                 android:textColor="@color/blue"
-                android:clickable="false"
+                android:drawableTop="@drawable/selector_pick_up_pic"
+                android:onClick="bottomBarClickListener"
+                android:clickable="true"
                 android:text="@string/pick_up_text"
                 android:textStyle="bold"/>
 
@@ -157,14 +156,7 @@
         android:layout_above="@id/bottom_bar_layout"
         android:layout_below="@id/search_actionbar">
 
-        <ImageView
-            android:id="@+id/empty_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@color/white"
-            android:visibility="gone"/>
-
-        <com.amap.api.maps.MapView
+        <com.amap.api.maps.TextureMapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

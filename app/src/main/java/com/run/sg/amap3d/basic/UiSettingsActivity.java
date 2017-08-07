@@ -30,6 +30,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -65,7 +66,7 @@ public class UiSettingsActivity extends Activity implements
 
     private Context mContext;
     private AMap aMap;
-    private MapView mapView;
+    private TextureMapView mapView;
     private UiSettings mUiSettings;
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
@@ -95,7 +96,6 @@ public class UiSettingsActivity extends Activity implements
     private LinearLayout mBottomBarLayout;
 
     private SlidingMenu mSlidingMenu;
-    private ImageView mEmptyMap;
     private FrameLayout mSearchContent;
 
     @Override
@@ -107,10 +107,9 @@ public class UiSettingsActivity extends Activity implements
         initSlidingMenu();
 
         mBottomBarLayout = (LinearLayout) findViewById(R.id.bottom_bar_layout);
-        mEmptyMap = (ImageView)findViewById(R.id.empty_map);
         mSearchContent = (FrameLayout)findViewById(R.id.search_view_container);
 
-        mapView = (MapView) findViewById(com.run.sg.amap3d.R.id.map);
+        mapView = (TextureMapView) findViewById(com.run.sg.amap3d.R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         registerListener();
@@ -444,29 +443,6 @@ public class UiSettingsActivity extends Activity implements
          */
         mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         mSlidingMenu.setMenu(R.layout.la_sg_slidingmenu_content);
-        mSlidingMenu.setOnOpenListener(new SlidingMenu.OnOpenListener() {
-            @Override
-            public void onOpen() {
-                Log.d("yq","onOpen");
-                mapView.setVisibility(View.GONE);
-                if (mEmptyMap != null && mEmptyMap.getVisibility() == View.GONE){
-                    mEmptyMap.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        mSlidingMenu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
-            @Override
-            public void onOpened() {
-                Log.d("yq","onOpened");
-                mapView.setVisibility(View.VISIBLE);
-                if (mEmptyMap != null && mEmptyMap.getVisibility() == View.VISIBLE){
-                    mEmptyMap.setVisibility(View.GONE);
-                }
-            }
-        });
-
-
     }
 
     @Override

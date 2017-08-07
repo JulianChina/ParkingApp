@@ -24,6 +24,7 @@
         android:textColor="@color/color_1B85FF"/>
 
     <ImageView
+        android:id="@+id/pick_up_divider"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@id/pick_up_back_img"
@@ -36,7 +37,76 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:text="@string/pick_up_pay_text"
         android:background="@color/f850_default_blue"/>
+
+    <LinearLayout
+        android:id="@+id/pick_up_position_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/pick_up_divider"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:background="@drawable/pickup_linearlayout_border">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pickup_current_position_text"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="88888888"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:background="@drawable/textview_border"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pick_up_position_layout"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:background="@drawable/pickup_linearlayout_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pickup_time_period_text"
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pickup_start_time_text"
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pickup_end_time_text"
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pickup_total_time_text"
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
 </RelativeLayout>

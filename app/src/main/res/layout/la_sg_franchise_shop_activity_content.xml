@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/partner_action_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue">
+        android:background="@color/blue"
+        android:layout_alignParentTop="true">
 
         <ImageView
             android:id="@+id/franchise_shop_back_img"
@@ -29,8 +31,215 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/partner_divider"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_below="@id/partner_action_bar"
         android:background="@color/sg_divider_color"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/partner_name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/partner_divider"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_name_text"/>
+
+    <EditText
+        android:id="@+id/partner_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_name_textview"
+        android:background="@drawable/search_bar_blue"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:hint="@string/partner_name_text2"
+        android:textColorHint="@color/translucent"/>
+
+    <TextView
+        android:id="@+id/partner_number_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_name_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_number_text"/>
+
+    <EditText
+        android:id="@+id/partner_number_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_number_textview"
+        android:background="@drawable/search_bar_blue"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_number_text2"/>
+
+    <TextView
+        android:id="@+id/partner_parking_name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_number_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_parking_name_text"/>
+
+    <EditText
+        android:id="@+id/partner_parking_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_parking_name_textview"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/search_bar_blue"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_parking_name_text"/>
+
+    <TextView
+        android:id="@+id/partner_parking_addr_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_parking_name_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_parking_addr_text"/>
+
+    <EditText
+        android:id="@+id/partner_parking_addr_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_parking_addr_textview"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/search_bar_blue"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_parking_addr_text"/>
+
+    <TextView
+        android:id="@+id/partner_contact_name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_parking_addr_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_contact_name_text"/>
+
+    <EditText
+        android:id="@+id/partner_contact_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_contact_name_textview"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/search_bar_blue"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_contact_name_text2"/>
+
+    <TextView
+        android:id="@+id/partner_contact_number_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_contact_name_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_contact_number_text"/>
+
+    <EditText
+        android:id="@+id/partner_contact_number_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_contact_number_textview"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/search_bar_blue"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_contact_number_text2"/>
+
+    <TextView
+        android:id="@+id/partner_remarks_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_contact_number_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/partner_remarks_text"/>
+
+    <EditText
+        android:id="@+id/partner_remarks_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_remarks_textview"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/search_bar_blue"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/translucent"
+        android:hint="@string/partner_remarks_text2"/>
+
+    <Button
+        android:id="@+id/partner_commit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_remarks_edittext"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@color/f850_default_blue"
+        android:text="@string/partner_commit_text"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/partner_hint_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partner_commit_btn"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/translucent"
+        android:background="@color/gray_lite"
+        android:textSize="14sp"
+        android:text="@string/partner_hint_text"/>
+
+</RelativeLayout>
